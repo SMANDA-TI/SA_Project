@@ -26,9 +26,9 @@
   </a>
 </p>
 <p align="center">
-  <a href="https://github.com/SMANDA-TI/SA_Project#requirements">Requirements</a> •
-  <a href="https://github.com/SMANDA-TI/SA_Project#instalasi">Installation</a> •
-  <a href="https://github.com/SMANDA-TI/SA_Project#memulai">Quick Start</a> •
+  <a href="https://github.com/SMANDA-TI/SA_Project/edit/main/README.md#requirements--persyaratan-">Requirements</a> •
+  <a href="https://github.com/SMANDA-TI/SA_Project#instalasi-">Installation</a> •
+  <a href="https://github.com/SMANDA-TI/SA_Project#quick-start-%EF%B8%8F">Quick Start</a> •
   <a href="https://github.com/SMANDA-TI/SA_Project#thanks-to">Thanks to</a> •
   <a href="https://github.com/SMANDA-TI/SA_Project#Official-Group"> Official Group</a> •
   <a href="https://github.com/SMANDA-TI/SA_Project#donate">Donate</a>
