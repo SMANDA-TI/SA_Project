@@ -62,6 +62,7 @@
 
 
 # Instalasi ✨
+Setelah Men-Download [Node.js](https://nodejs.org/en/) dan [Git](https://git-scm.com/downloads) di sistem kamu, jalankan instalasi projectnya dengan: 
 ```ruby
 git clone https://github.com/SMANDA-TI/SA_Project.git
 ```
