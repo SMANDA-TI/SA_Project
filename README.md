@@ -62,16 +62,17 @@
 
 
 # Instalasi ✨
-## Di Windows 💻
-```bash
+```ruby
 git clone https://github.com/SMANDA-TI/SA_Project.git
 ```
-```bash
-cd SA_Project
+```python
+cd SA_Project/SMANDA_APP
 ```
 ```ruby
 npm install
 ```
+# Quick Start 🏃‍♂️
+Setelah melalui persyaratan dan melakuan instalasi project, pastiin direktori di "_SA_Project/SMANDA_APP_" dan langsung mulai aja developmentnya dengan: 
 ```ruby
 npm start
 ```
