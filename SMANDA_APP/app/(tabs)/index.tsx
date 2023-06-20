@@ -3,6 +3,7 @@ import { StyleSheet, Button } from "react-native";
 import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "../../components/Themed";
 import { useRouter } from "expo-router";
+import ButtonAlertDialog from "../../components/smanda/AlertDialog";
 
 export default function TabOneScreen() {
     const router = useRouter();
@@ -14,14 +15,15 @@ export default function TabOneScreen() {
             <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
             <EditScreenInfo path="app/(tabs)/index.tsx" />
             <Button
-                title="CHANGE PARAMS"
+                title="Go To Tab Two"
                 onPress={() => {
                     // Contoh dari Penggunaan router di expo-router
                     // router.back();
-                    // router.push("modal");
+                    router.push("two");
                     // router.setParams({ name: "Updated" });
                 }}
             />
+            <ButtonAlertDialog />
         </View>
     );
 }
