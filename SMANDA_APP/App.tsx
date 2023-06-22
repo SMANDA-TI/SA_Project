@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { GetStarted } from "./src/screens/GetStarted";
 import { MyTabs } from "./src/screens/(tabs)/Handler";
 import { MD3DarkTheme, PaperProvider } from "react-native-paper";
-import { NowThemeNav, NowPaperTheme } from "./src/Colors_Themes";
+import { NowThemeNav, NowPaperTheme } from "./src/Colors&Themes";
 
 function App() {
     // alert(combinedTheme.colors.text);
