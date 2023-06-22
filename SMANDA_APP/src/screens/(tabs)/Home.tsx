@@ -1,5 +1,6 @@
-import { View, Text, Button } from "react-native";
+import { View, Button } from "react-native";
 import { RootScreenProps } from "../../types/NavigationType";
+import { Text } from "react-native-paper";
 
 export function HomeScreen(props: RootScreenProps) {
     return (
@@ -13,7 +14,7 @@ export function HomeScreen(props: RootScreenProps) {
                     })
                 }></Button>
             <Text>Welcome Screen</Text>
-            <Button title="Preview to Welcome" onPress={() => props.navigation.replace("Welcome")}></Button>
+            <Button title="Preview to Welcome" onPress={() => props.navigation.navigate("Welcome")}></Button>
         </View>
     );
 }

@@ -25,7 +25,7 @@ export function GetStarted(props: RootScreenProps) {
                     subtitle: "Selamat Datang di Aplikasi Mobile SMAN 2 Kuningan. ✨",
                 },
                 {
-                    backgroundColor: "#35b41b",
+                    backgroundColor: "#000000",
                     image: (
                         <Image
                             style={{
@@ -40,7 +40,7 @@ export function GetStarted(props: RootScreenProps) {
                     subtitle: "Aplikasi ini bertujuan sebagai platform informasi \ndan edukasi tentang SMAN 2 Kuningan.😎",
                 },
                 {
-                    backgroundColor: "#0000ff",
+                    backgroundColor: "#000000",
                     image: (
                         <Image
                             style={{
