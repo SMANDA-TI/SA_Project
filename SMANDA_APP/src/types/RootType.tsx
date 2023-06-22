@@ -5,11 +5,17 @@ import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 export type RootStackScreen = {
     "(tabs)": NavigatorScreenParams<RootTabScreen>;
     Welcome: undefined;
+    "(overlay)": NavigatorScreenParams<RootTabScreen>;
 };
 
+export type TabScreenAvailable = "Home" | "Event" | "Information" | "Settings";
+export type OverlayScreenAvailable = "Account";
+
 export type RootTabScreen = {
-    Home: undefined;
-    Details: undefined;
+    [Key in TabScreenAvailable]: undefined;
+};
+export type RootOverlayScreen = {
+    [Key in OverlayScreenAvailable]: undefined;
 };
 
 export type RootScreenProps = NativeStackScreenProps<RootStackScreen>;

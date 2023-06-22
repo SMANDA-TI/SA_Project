@@ -1,6 +1,6 @@
 import Onboarding from "react-native-onboarding-swiper";
 import { Image } from "react-native";
-import { RootScreenProps } from "../types/NavigationType";
+import { RootScreenProps } from "../types/RootType";
 
 export function GetStarted(props: RootScreenProps) {
     // const nav = useNavigation();

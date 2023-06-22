@@ -3,10 +3,14 @@ import { View, StyleSheet } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Text, BottomNavigation } from "react-native-paper";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+// import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { CommonActions } from "@react-navigation/native";
 import { HomeScreen } from "./Home";
-import { DetailsScreen } from "./Details";
+import { InformationScreen } from "./Information";
+import { EventScreen } from "./Event";
+import { SettingsScreen } from "./Settings";
+import { AppHeaderComponent } from "../../components/AppHeaderComponent";
 
 const Tab = createBottomTabNavigator();
 
@@ -14,7 +18,7 @@ export function MyTabs() {
     return (
         <Tab.Navigator
             screenOptions={{
-                headerShown: false,
+                headerShown: true,
             }}
             tabBar={({ navigation, state, descriptors, insets }) => (
                 <BottomNavigation.Bar
@@ -57,20 +61,44 @@ export function MyTabs() {
                 name="Home"
                 component={HomeScreen}
                 options={{
-                    tabBarLabel: "Home",
+                    tabBarLabel: "Beranda",
                     tabBarIcon: ({ color, size }) => {
-                        return <Icon name="home" size={size} color={color} />;
+                        return <MaterialCommunityIcons name="home" size={size} color={color} />;
                     },
+                    header: () => AppHeaderComponent("Home"),
                 }}
             />
             <Tab.Screen
-                name="Details"
-                component={DetailsScreen}
+                name="Event"
+                component={EventScreen}
                 options={{
-                    tabBarLabel: "Details",
+                    tabBarLabel: "Event",
                     tabBarIcon: ({ color, size }) => {
-                        return <Icon name="cog" size={size} color={color} />;
+                        return <MaterialCommunityIcons name="school" size={size} color={color} />;
                     },
+                    header: () => AppHeaderComponent("Event"),
+                }}
+            />
+            <Tab.Screen
+                name="Information"
+                component={InformationScreen}
+                options={{
+                    tabBarLabel: "Informasi",
+                    tabBarIcon: ({ color, size }) => {
+                        return <MaterialCommunityIcons name="forum" size={size} color={color} />;
+                    },
+                    header: () => AppHeaderComponent("Information"),
+                }}
+            />
+            <Tab.Screen
+                name="Settings"
+                component={SettingsScreen}
+                options={{
+                    tabBarLabel: "Penggaturan",
+                    tabBarIcon: ({ color, size }) => {
+                        return <MaterialCommunityIcons name="cog" size={size} color={color} />;
+                    },
+                    header: () => AppHeaderComponent("Settings"),
                 }}
             />
         </Tab.Navigator>

@@ -1,20 +1,26 @@
-import { View, Button } from "react-native";
-import { RootScreenProps } from "../../types/NavigationType";
-import { Text } from "react-native-paper";
+import { View } from "react-native";
+import { RootScreenProps } from "../../types/RootType";
+import { Text, Button, useTheme } from "react-native-paper";
+// import { LinearGradient } from "expo-linear-gradient";
 
 export function HomeScreen(props: RootScreenProps) {
+    const theme = useTheme();
     return (
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-            <Text>Home Screen</Text>
+            <Text>Beranda!</Text>
             <Button
-                title="Go to Details"
+                mode="contained-tonal"
                 onPress={() =>
                     props.navigation.navigate("(tabs)", {
-                        screen: "Details",
+                        screen: "Information",
                     })
-                }></Button>
+                }>
+                Go to Information
+            </Button>
             <Text>Welcome Screen</Text>
-            <Button title="Preview to Welcome" onPress={() => props.navigation.navigate("Welcome")}></Button>
+            <Button mode="contained-tonal" onPress={() => props.navigation.navigate("Welcome")}>
+                Preview to Welcome
+            </Button>
         </View>
     );
 }

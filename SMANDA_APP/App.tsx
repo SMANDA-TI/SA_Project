@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -6,7 +7,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { GetStarted } from "./src/screens/GetStarted";
 import { MyTabs } from "./src/screens/(tabs)/Handler";
 import { MD3DarkTheme, PaperProvider } from "react-native-paper";
-import { NowThemeNav, NowPaperTheme } from "./src/Colors&Themes";
+import { NowThemeNav, NowPaperTheme, isDarkMode } from "./src/Colors&Themes";
+import { StatusBar } from "expo-status-bar";
 
 function App() {
     // alert(combinedTheme.colors.text);
@@ -27,12 +29,13 @@ function App() {
     }, []);
     return (
         firstLaunch != null && (
-            <PaperProvider theme={NowPaperTheme}>
+            <PaperProvider theme={NowThemeNav}>
                 <NavigationContainer theme={NowThemeNav}>
                     <Stack.Navigator>
                         {firstLaunch && <Stack.Screen name="Welcome" component={GetStarted} options={{ headerShown: false }} />}
                         <Stack.Screen name="(tabs)" component={MyTabs} options={{ headerShown: false }} />
                     </Stack.Navigator>
+                    <StatusBar style={isDarkMode ? "light" : "dark"} />
                 </NavigationContainer>
             </PaperProvider>
         )
