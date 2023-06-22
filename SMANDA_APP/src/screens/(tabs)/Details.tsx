@@ -1,5 +1,5 @@
 import { View, Text, Button } from "react-native";
-import { RootStackScreen, StackScreenProps, typeUseNavigation } from "../types/NavigationType";
+import { RootStackScreen, RootScreenProps, typeUseNavigation } from "../../types/NavigationType";
 import { useNavigation } from "@react-navigation/native";
 
 export function DetailsScreen() {

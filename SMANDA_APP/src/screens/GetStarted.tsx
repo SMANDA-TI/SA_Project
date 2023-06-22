@@ -1,13 +1,13 @@
 import Onboarding from "react-native-onboarding-swiper";
 import { Image } from "react-native";
-import { StackScreenProps } from "../types/NavigationType";
+import { RootScreenProps } from "../types/NavigationType";
 
-export function GetStarted(props: StackScreenProps) {
+export function GetStarted(props: RootScreenProps) {
     // const nav = useNavigation();
     return (
         <Onboarding
-            onDone={() => props.navigation.push("Home")}
-            onSkip={() => props.navigation.push("Home")}
+            onDone={() => props.navigation.replace("(tabs)")}
+            onSkip={() => props.navigation.replace("(tabs)")}
             pages={[
                 {
                     backgroundColor: "#000000",
