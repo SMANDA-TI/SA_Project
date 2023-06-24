@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Text, BottomNavigation } from "react-native-paper";
+import { Text, BottomNavigation, useTheme } from "react-native-paper";
 // import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { CommonActions } from "@react-navigation/native";
@@ -65,7 +65,7 @@ export function MyTabs() {
                     tabBarIcon: ({ color, size }) => {
                         return <MaterialCommunityIcons name="home" size={size} color={color} />;
                     },
-                    header: () => AppHeaderComponent("Home"),
+                    header: () => <AppHeaderComponent Title="Home" />,
                 }}
             />
             <Tab.Screen
@@ -76,7 +76,7 @@ export function MyTabs() {
                     tabBarIcon: ({ color, size }) => {
                         return <MaterialCommunityIcons name="school" size={size} color={color} />;
                     },
-                    header: () => AppHeaderComponent("Event"),
+                    header: () => <AppHeaderComponent Title="Event" />,
                 }}
             />
             <Tab.Screen
@@ -87,7 +87,7 @@ export function MyTabs() {
                     tabBarIcon: ({ color, size }) => {
                         return <MaterialCommunityIcons name="forum" size={size} color={color} />;
                     },
-                    header: () => AppHeaderComponent("Information"),
+                    header: () => <AppHeaderComponent Title="Information" />,
                 }}
             />
             <Tab.Screen
@@ -98,7 +98,7 @@ export function MyTabs() {
                     tabBarIcon: ({ color, size }) => {
                         return <MaterialCommunityIcons name="cog" size={size} color={color} />;
                     },
-                    header: () => AppHeaderComponent("Settings"),
+                    header: () => <AppHeaderComponent Title="Settings" />,
                 }}
             />
         </Tab.Navigator>

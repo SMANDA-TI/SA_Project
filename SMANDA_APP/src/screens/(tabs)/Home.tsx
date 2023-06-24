@@ -4,7 +4,6 @@ import { Text, Button, useTheme } from "react-native-paper";
 // import { LinearGradient } from "expo-linear-gradient";
 
 export function HomeScreen(props: RootScreenProps) {
-    const theme = useTheme();
     return (
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
             <Text>Beranda!</Text>

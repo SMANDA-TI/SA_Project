@@ -1,12 +1,12 @@
 import { DefaultTheme as NavigationLightTheme, DarkTheme as NavigationDarkTheme } from "@react-navigation/native";
-import { adaptNavigationTheme, MD3DarkTheme, MD3LightTheme } from "react-native-paper";
+import { adaptNavigationTheme, MD3DarkTheme, MD3LightTheme, useTheme } from "react-native-paper";
 
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
     reactNavigationLight: NavigationLightTheme,
     reactNavigationDark: NavigationDarkTheme,
 });
 
-const SMANDA_LIGHT = {
+export const SMANDA_LIGHT = {
     colors: {
         primary: "rgb(0, 106, 106)",
         onPrimary: "rgb(255, 255, 255)",
@@ -51,7 +51,7 @@ const SMANDA_LIGHT = {
     },
 };
 
-const SMANDA_DARK = {
+export const SMANDA_DARK = {
     colors: {
         primary: "rgb(0, 221, 221)",
         onPrimary: "rgb(0, 55, 55)",
@@ -141,7 +141,21 @@ const OrangeDark = {
     },
 };
 
-const CombinedDefaultTheme = {
+export const PaperDarkThemeCombined = {
+    ...MD3LightTheme,
+    colors: {
+        ...MD3LightTheme.colors,
+        ...SMANDA_LIGHT.colors,
+    },
+};
+export const PaperLightThemeCombined = {
+    ...MD3LightTheme,
+    colors: {
+        ...MD3LightTheme.colors,
+        ...SMANDA_LIGHT.colors,
+    },
+};
+export const CombinedDefaultTheme = {
     ...MD3LightTheme,
     ...LightTheme,
     colors: {
@@ -151,7 +165,7 @@ const CombinedDefaultTheme = {
     },
 };
 
-const CombinedDarkTheme = {
+export const CombinedDarkTheme = {
     ...MD3DarkTheme,
     ...DarkTheme,
     colors: {
@@ -162,6 +176,7 @@ const CombinedDarkTheme = {
     },
 };
 // Implementasi palsu
-export const isDarkMode = true;
-export const NowThemeNav = isDarkMode ? CombinedDarkTheme : CombinedDefaultTheme;
-export const NowPaperTheme = isDarkMode ? MD3DarkTheme : MD3LightTheme;
+const isDarkMode = () => useTheme().dark;
+// export const WhatsTheme = useTheme().dark;
+// export const NowThemeNav = isDarkMode ? CombinedDarkTheme : CombinedDefaultTheme;
+// export const NowPaperTheme = isDarkMode ? MD3DarkTheme : MD3LightTheme;
