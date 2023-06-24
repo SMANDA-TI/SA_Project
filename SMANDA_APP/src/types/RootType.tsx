@@ -18,11 +18,6 @@ export type RootOverlayScreen = {
     [Key in OverlayScreenAvailable]: undefined;
 };
 
-export type Props = {
-    toggleTheme: () => void;
-    isDarkMode: boolean;
-};
-
 export type RootScreenProps = NativeStackScreenProps<RootStackScreen>;
 export type typeUseNavigation = NativeStackNavigationProp<ParamListBase>;
 // export type typeUseNavigaion = NativeStackNavigationProp<ParamListBase<RootStackScreen>>;
