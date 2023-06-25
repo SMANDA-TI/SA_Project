@@ -3,8 +3,9 @@ import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-naviga
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 export type RootStackScreen = {
-    "(tabs)": NavigatorScreenParams<RootTabScreen>;
     Welcome: undefined;
+    GetStarted: undefined;
+    "(tabs)": NavigatorScreenParams<RootTabScreen>;
     "(overlay)": NavigatorScreenParams<RootTabScreen>;
 };
 

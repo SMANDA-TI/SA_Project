@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // Komponen Lokal
+import { WelcomeScreen } from "./screens/WelcomeScreen";
 import { GetStarted } from "./screens/GetStarted";
 import { MyTabs } from "./screens/(tabs)/Handler";
 import { PaperProvider, Text } from "react-native-paper";
@@ -19,18 +20,18 @@ export function Main() {
     // Kontrol FirstLaunching
     useEffect(() => {
         // Uncomment di produksi Environment
-        async function setData() {
-            const appData = await AsyncStorage.getItem("appLaunched");
-            if (appData == null) {
-                setFirstLaunch(true);
-                AsyncStorage.setItem("appLaunched", "false");
-            } else {
-                setFirstLaunch(false);
-            }
-        }
-        setData();
+        // async function setData() {
+        //     const appData = await AsyncStorage.getItem("appLaunched");
+        //     if (appData == null) {
+        //         setFirstLaunch(true);
+        //         AsyncStorage.setItem("appLaunched", "false");
+        //     } else {
+        //         setFirstLaunch(false);
+        //     }
+        // }
+        // setData();
         // Comment di produksi Environment
-        // setFirstLaunch(true);
+        setFirstLaunch(true);
     }, []);
 
     // Kontrol IntisialisasiTheme
@@ -80,7 +81,13 @@ export function Main() {
             <PaperProvider theme={combinedTheme}>
                 <NavigationContainer theme={combinedTheme}>
                     <Stack.Navigator>
-                        {firstLaunch && <Stack.Screen name="Welcome" component={GetStarted} options={{ headerShown: false }} />}
+                        {firstLaunch && (
+                            <>
+                                <Stack.Screen name="GetStarted" component={GetStarted} options={{ headerShown: false }} />
+                                <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
+                            </>
+                        )}
+
                         <Stack.Screen name="(tabs)" component={MyTabs} options={{ headerShown: false }} />
                     </Stack.Navigator>
                     <StatusBar style={state.isDarkMode ? "light" : "dark"} />

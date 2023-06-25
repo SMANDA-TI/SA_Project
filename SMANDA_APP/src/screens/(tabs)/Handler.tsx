@@ -22,6 +22,9 @@ export function MyTabs() {
             }}
             tabBar={({ navigation, state, descriptors, insets }) => (
                 <BottomNavigation.Bar
+                    compact={true}
+                    // uncomment kalo mau inactive tabs jangan ada label text-nya, dan ada animation pas clicknya https://callstack.github.io/react-native-paper/docs/components/BottomNavigation/BottomNavigationBar/#props
+                    // shifting={true}
                     navigationState={state}
                     safeAreaInsets={insets}
                     onTabPress={({ route, preventDefault }) => {
@@ -30,7 +33,6 @@ export function MyTabs() {
                             target: route.key,
                             canPreventDefault: true,
                         });
-
                         if (event.defaultPrevented) {
                             preventDefault();
                         } else {
@@ -52,7 +54,7 @@ export function MyTabs() {
                         const { options } = descriptors[route.key];
                         const label =
                             options.tabBarLabel !== undefined ? options.tabBarLabel : options.title !== undefined ? options.title : route.name;
-
+                        // console.log(options);
                         return label as string;
                     }}
                 />

@@ -17,8 +17,8 @@ export function HomeScreen(props: RootScreenProps) {
                 Go to Information
             </Button>
             <Text>Welcome Screen</Text>
-            <Button mode="contained-tonal" onPress={() => props.navigation.navigate("Welcome")}>
-                Preview to Welcome
+            <Button mode="contained-tonal" onPress={() => props.navigation.navigate("GetStarted")}>
+                Go to GetStarted
             </Button>
         </View>
     );
