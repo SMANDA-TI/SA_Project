@@ -72,4 +72,5 @@ export interface MappedPostData {
     type: string;
     status: string;
     redirect: string;
+    local_date: string;
 }

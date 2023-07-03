@@ -129,14 +129,7 @@ function ArticleLargeHome(props: Props) {
                         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                             <View style={{ flexDirection: "column" }}>
                                 <Text variant="labelLarge" style={{ paddingTop: 15 }}>
-                                    {new Date(props.item.date).toLocaleDateString("id-ID", {
-                                        day: "numeric",
-                                        month: "long",
-                                        year: "numeric",
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                        timeZoneName: "short",
-                                    })}
+                                    {props.item.local_date}
                                 </Text>
                                 <Text variant="labelMedium" style={{ paddingBottom: 15 }}>
                                     {`By: ${props.item.author.name}`}
