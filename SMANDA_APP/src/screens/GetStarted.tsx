@@ -3,14 +3,19 @@ import { RootScreenProps } from "../types/RootType";
 import { Text, Button, Headline } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import DefaultView from "../components/DefaultContainerView";
+import { useGlobals } from "../context/RootContext";
 
 export function GetStarted(props: RootScreenProps) {
+    // const tema = useTheme();
     // const nav = useNavigation<typeUseNavigation>();
+    const { state } = useGlobals();
     return (
-        <DefaultView>
-            <View style={{ flex: 0.6 }} />
-            <View style={styles.textContainer}>
-                <Headline style={styles.textHeadline}>Selamat datang!</Headline>
+        <DefaultView keyboardAvoidView={false}>
+            <View style={{ flex: 0.3 }} />
+            <View style={[styles.textContainer]}>
+                <Text variant="headlineLarge" style={[styles.textHeadline]}>
+                    Selamat datang!
+                </Text>
                 <Text style={styles.textText}>Di SMANDA APP, ini adalah platform informasi dan edukasi tentang SMAN 2 Kuningan.😎</Text>
             </View>
             <View style={{ flex: 2 }}>
@@ -25,8 +30,17 @@ export function GetStarted(props: RootScreenProps) {
                 />
             </View>
             <View style={styles.buttonContainer}>
-                <Button style={{ borderRadius: 0 }} mode="contained-tonal" onPress={() => props.navigation.navigate("Welcome")}>
+                <Button
+                    style={{ borderRadius: 15 }}
+                    contentStyle={{ height: 50 }}
+                    labelStyle={{ fontSize: 15 }}
+                    mode={state.isTransparent ? "contained-tonal" : "contained"}
+                    // uppercase={true}
+                    onPress={() => props.navigation.navigate("Welcome")}>
                     Get Started
+                    {/* <Text variant="titleMedium" style={{ color: tema.colors.onPrimary }}>
+                        Get Started
+                    </Text> */}
                 </Button>
             </View>
         </DefaultView>
@@ -61,7 +75,11 @@ const styles = StyleSheet.create({
     textHeadline: {
         textAlign: "center",
         textTransform: "uppercase",
-        fontWeight: "bold",
+        // fontWeight: "bold",
+        fontSize: 26,
+        lineHeight: 32,
+        marginVertical: 2,
+        letterSpacing: 0,
     },
     textText: {
         textAlign: "center",
@@ -78,6 +96,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingTop: 35,
         justifyContent: "flex-end",
-        marginBottom: 20,
+        marginBottom: 25,
     },
 });

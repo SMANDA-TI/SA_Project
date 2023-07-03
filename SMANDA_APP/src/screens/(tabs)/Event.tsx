@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, SafeAreaView } from "react-native";
 import { RootScreenProps, typeUseNavigation } from "../../types/RootType";
 import { useNavigation } from "@react-navigation/native";
 import { Text, Card, Button } from "react-native-paper";
@@ -12,28 +12,30 @@ export function EventScreen(props: RootScreenProps) {
         //     <Text>Welcome Screen</Text>
         //     <Button title="Preview to Welcome Again" onPress={() => props.navigation.navigate("Welcome")}></Button>
         // </View>
-        <View style={{ padding: 20, paddingVertical: 50 }}>
-            <Card style={{}}>
-                <Card.Title
-                    titleStyle={{ paddingBottom: 3, paddingTop: 20 }}
-                    titleVariant="titleLarge"
-                    title="Lorem ipsum dolor sit amet. 💻"
-                    subtitleVariant="labelLarge"
-                    subtitleStyle={{ paddingVertical: 10 }}
-                    subtitle="Get Shipped 🤓"
-                />
-                <Card.Content>
-                    <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
-                    <Text variant="bodyMedium" style={{ paddingTop: 20 }}>
-                        Lorem ipsum dolor sit amet.
-                    </Text>
-                    <Text variant="bodyMedium">By: Fulan</Text>
-                </Card.Content>
-                <Card.Actions>
-                    <Button onPress={() => props.navigation.navigate("(tabs)", { screen: "Settings" })}>Cancel</Button>
-                    <Button>Ok</Button>
-                </Card.Actions>
-            </Card>
-        </View>
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={{ padding: 20, paddingVertical: 50 }}>
+                <Card style={{}}>
+                    <Card.Title
+                        titleStyle={{ paddingBottom: 3, paddingTop: 20 }}
+                        titleVariant="titleLarge"
+                        title="Lorem ipsum dolor sit amet. 💻"
+                        subtitleVariant="labelLarge"
+                        subtitleStyle={{ paddingVertical: 10 }}
+                        subtitle="Get Shipped 🤓"
+                    />
+                    <Card.Content>
+                        <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
+                        <Text variant="bodyMedium" style={{ paddingTop: 20 }}>
+                            Lorem ipsum dolor sit amet.
+                        </Text>
+                        <Text variant="bodyMedium">By: Fulan</Text>
+                    </Card.Content>
+                    <Card.Actions>
+                        <Button onPress={() => props.navigation.navigate("(tabs)", { screen: "Settings" })}>Cancel</Button>
+                        <Button>Ok</Button>
+                    </Card.Actions>
+                </Card>
+            </View>
+        </SafeAreaView>
     );
 }

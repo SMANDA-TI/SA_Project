@@ -1,5 +1,5 @@
 import { DefaultTheme as NavigationLightTheme, DarkTheme as NavigationDarkTheme } from "@react-navigation/native";
-import { adaptNavigationTheme, MD3DarkTheme, MD3LightTheme, useTheme } from "react-native-paper";
+import { adaptNavigationTheme, configureFonts, MD3DarkTheme, MD3LightTheme, useTheme } from "react-native-paper";
 
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
     reactNavigationLight: NavigationLightTheme,
@@ -174,9 +174,10 @@ export const CombinedDarkTheme = {
         ...SMANDA_DARK.colors,
         // ...OrangeDark.colors,
     },
+    // fonts: configureFonts()
 };
 // Implementasi palsu
-const isDarkMode = () => useTheme().dark;
+// const isDarkMode = () => useTheme().dark;
 // export const WhatsTheme = useTheme().dark;
 // export const NowThemeNav = isDarkMode ? CombinedDarkTheme : CombinedDefaultTheme;
 // export const NowPaperTheme = isDarkMode ? MD3DarkTheme : MD3LightTheme;

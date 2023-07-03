@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/dev": "^0.2.3",
     "@react-native-async-storage/async-storage": "1.17.11",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/material-bottom-tabs": "^6.2.15",
@@ -17,23 +18,29 @@
     "@react-navigation/stack": "^6.3.17",
     "expo": "~48.0.18",
     "expo-blur": "~12.2.2",
+    "expo-font": "~11.1.1",
     "expo-linear-gradient": "~12.1.2",
+    "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
     "native-base": "^3.4.28",
     "react": "18.2.0",
     "react-native": "0.71.8",
-    "react-native-app-intro-slider": "^4.0.4",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-onboarding-swiper": "^1.2.0",
     "react-native-paper": "^5.8.0",
+    "react-native-reanimated-carousel": "^3.4.0",
     "react-native-safe-area-context": "^4.5.0",
     "react-native-screens": "~3.20.0",
-    "react-native-vector-icons": "^9.2.0"
+    "react-native-vector-icons": "^9.2.0",
+    "wpapi": "^1.2.2",
+    "react-native-reanimated": "~2.14.4",
+    "expo-screen-orientation": "~5.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.0.14",
     "@types/react-native-onboarding-swiper": "^1.1.4",
+    "@types/wpapi": "^1.1.1",
     "typescript": "^4.9.4"
   },
   "private": true
