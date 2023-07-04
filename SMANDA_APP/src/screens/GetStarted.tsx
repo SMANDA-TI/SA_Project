@@ -36,7 +36,7 @@ export function GetStarted(props: RootScreenProps) {
                     labelStyle={{ fontSize: 15 }}
                     mode={state.isTransparent ? "contained-tonal" : "contained"}
                     // uppercase={true}
-                    onPress={() => props.navigation.navigate("Welcome")}>
+                    onPress={() => props.navigation.replace("Welcome")}>
                     Get Started
                     {/* <Text variant="titleMedium" style={{ color: tema.colors.onPrimary }}>
                         Get Started

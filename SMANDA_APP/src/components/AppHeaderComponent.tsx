@@ -25,7 +25,7 @@ export function AppHeaderComponent(props: { Title: TabScreenAvailable }) {
                         ? "Informasi"
                         : props.Title == "Settings"
                         ? "Penggaturan"
-                        : "Event"
+                        : "Sekolah"
                 }
             />
             <Appbar.Action icon="magnify" onPress={() => {}} />

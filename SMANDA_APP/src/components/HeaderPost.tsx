@@ -1,18 +1,14 @@
 import * as React from "react";
-import { View, StyleSheet, Platform, GestureResponderEvent, Image, ImageBackground } from "react-native";
+import { View, StyleSheet, Platform, GestureResponderEvent, Image, Share } from "react-native";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import { Menu, Appbar, Divider, Button, List, TouchableRipple, useTheme, Text } from "react-native-paper";
 import ScreenWrapper from "./ScreenWrapper";
 import { useGlobals } from "../context/RootContext";
-import { RootStackScreen } from "../types/RootType";
+import { PropsPost } from "../types/RootType";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 
 type ContextualMenuCoord = { x: number; y: number };
-
-type Props = {
-    navigation: StackNavigationProp<RootStackScreen>;
-};
 
 type MenuVisibility = {
     [key: string]: boolean | undefined;
@@ -20,30 +16,32 @@ type MenuVisibility = {
 
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
-const HeaderPostComp = ({ navigation }: Props) => {
-    const { state, dispatch } = useGlobals();
+const HeaderPostComp = ({ navigation, route }: PropsPost) => {
+    const { dispatch } = useGlobals();
+    const { post_data } = route.params;
     const [visible, setVisible] = React.useState<MenuVisibility>({});
-    const [contextualMenuCoord, setContextualMenuCoor] = React.useState<ContextualMenuCoord>({ x: 0, y: 0 });
-    const { isV3 } = useTheme();
 
     const _toggleMenu = (name: string) => () => setVisible({ ...visible, [name]: !visible[name] });
-
     const _getVisible = (name: string) => !!visible[name];
 
-    const _handleLongPress = (event: GestureResponderEvent) => {
-        const { nativeEvent } = event;
-        setContextualMenuCoor({
-            x: nativeEvent.pageX,
-            y: nativeEvent.pageY,
-        });
-        setVisible({ menu3: true });
+    const onShare = async () => {
+        try {
+            const result = await Share.share({
+                message: `${
+                    post_data.title
+                    // .trim()
+                    // .toLowerCase()
+                    // .replace(/\b\w/g, (match) => match.toUpperCase())
+                }\n\nBaca Selengkapnya Di: ${post_data.redirect}\n\nPesan ini di share melalui aplikasi mobile SMANDA APP 😁🎉`,
+            });
+            if (result?.action) {
+                // _toggleMenu("menu1");
+                setVisible({ ...visible, ["menu1"]: !visible["menu1"] });
+            }
+        } catch (error) {
+            return;
+        }
     };
-
-    // React.useLayoutEffect(() => {
-    //     navigation.setOptions({
-    //         headerShown: false,
-    //     });
-    // }, [navigation]);
     const RippleKolor = "rgba(255, 255, 255, 0.3)";
     return (
         <View style={styles.screen}>
@@ -77,11 +75,11 @@ const HeaderPostComp = ({ navigation }: Props) => {
                                 }}
                                 title="Readability"
                             />
-                            <Divider style={styles.md3Divider} />
+                            {/* <Divider style={styles.md3Divider} />
                             <Menu.Item leadingIcon="content-copy" onPress={() => {}} title="Copy" />
-                            <Menu.Item leadingIcon="content-paste" onPress={() => {}} title="Paste" disabled />
+                            <Menu.Item leadingIcon="content-paste" onPress={() => {}} title="Paste" disabled /> */}
                             <Divider style={styles.md3Divider} />
-                            <Menu.Item trailingIcon="share-variant" onPress={() => {}} title="Share" />
+                            <Menu.Item trailingIcon="share-variant" onPress={onShare} title="Share" />
                         </Menu>
                     </View>
                 </Appbar.Header>

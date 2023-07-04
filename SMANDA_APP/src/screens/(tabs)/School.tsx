@@ -3,7 +3,7 @@ import { RootScreenProps, typeUseNavigation } from "../../types/RootType";
 import { useNavigation } from "@react-navigation/native";
 import { Text, Card, Button } from "react-native-paper";
 
-export function EventScreen(props: RootScreenProps) {
+export function SchoolScreen(props: RootScreenProps) {
     // const nav = useNavigation<typeUseNavigation>();
     return (
         // <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>

@@ -21,7 +21,8 @@ import {
     SignikaNegative_700Bold,
 } from "@expo-google-fonts/dev";
 import * as SplashScreen from "expo-splash-screen";
-import Handler from "./screens/(post)/Handler";
+import PostStack from "./screens/(post)/Handler";
+import SearchStack from "./screens/(search)/Handler";
 SplashScreen.preventAutoHideAsync();
 
 export function Main() {
@@ -217,7 +218,8 @@ export function Main() {
                         )}
 
                         <Stack.Screen name="(tabs)" component={MyTabs} options={{ headerShown: false }} />
-                        <Stack.Screen name="(post)" component={Handler} options={{ headerShown: false }} />
+                        <Stack.Screen name="(post)" component={PostStack} options={{ headerShown: false }} />
+                        <Stack.Screen name="(search)" component={SearchStack} options={{ headerShown: false }} />
                     </Stack.Navigator>
                     <StatusBar style={isInPost ? "light" : state.isDarkMode ? "light" : "dark"} animated />
                 </NavigationContainer>

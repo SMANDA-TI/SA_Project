@@ -10,7 +10,7 @@ import {
     StyleProp,
     TextStyle,
 } from "react-native";
-import { RootScreenProps, typeUseNavigation } from "../../types/RootType";
+import { DKRootScreenProps, NavigationProp, PropsOptional, RootScreenProps, typeUseNavigation } from "../../types/RootType";
 import { Text, Button, Searchbar, List, Card, Chip, IconButton, useTheme, Surface, TouchableRipple } from "react-native-paper";
 // import { SearchBar } from "../../components/SearchBar";
 import ScreenWrapper from "../../components/ScreenWrapper";
@@ -23,7 +23,7 @@ import type { ICarouselInstance } from "react-native-reanimated-carousel";
 import { GestureHandlerRootView, TouchableOpacity } from "react-native-gesture-handler";
 import { MappedPostData } from "../../types/PostTypes";
 import { CarouselRenderItemInfo } from "react-native-reanimated-carousel/lib/typescript/types";
-import { useNavigation } from "@react-navigation/native";
+import { SearchButton } from "../../components/SearchButton";
 
 // * Random Words Generator nih bang
 // const words = ["Artikel", "Mantap", "Aku", "🎉", "👋"];
@@ -32,9 +32,9 @@ import { useNavigation } from "@react-navigation/native";
 //     const randomIndex = Math.floor(Math.random() * words.length);
 //     return words[randomIndex];
 // }
-type Props =
-    // RootScreenProps &
-    CarouselRenderItemInfo<MappedPostData>;
+type Props = RootScreenProps & CarouselRenderItemInfo<MappedPostData>;
+type CarouselProps = RootScreenProps & CarouselRenderItemInfo<MappedPostData>;
+
 export function HomeScreen(props: RootScreenProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const onChangeSearch = (query) => setSearchQuery(query);
@@ -52,10 +52,10 @@ export function HomeScreen(props: RootScreenProps) {
                 }}
                 removeClippedSubviews={true}>
                 {/* <Text style={{ fontFamily: "Belanosima-SemiBold", fontSize: 20 }}>Belanosima</Text> */}
-                <Searchbar placeholder="Pencarian" onChangeText={onChangeSearch} style={{ marginVertical: 10 }} value={searchQuery} />
+                <SearchButton navigation={props.navigation} route={props.route} />
                 {/* <Text style={{ fontFamily: "Belanosima-SemiBold", fontSize: 20 }}>Beranda!</Text> */}
-                <ButtonHomeComp />
-                <ArticleCarouselHome />
+                <ButtonHomeComp navigation={props.navigation} />
+                <ArticleCarouselHome navigation={props.navigation} route={props.route} />
             </ScrollView>
         </GestureHandlerRootView>
 
@@ -63,51 +63,31 @@ export function HomeScreen(props: RootScreenProps) {
     );
 }
 
-function ArticleLargeHome(props: Props) {
+function ArticleLargeHome({ navigation, route, item, index, animationValue }: Props) {
     const { state, dispatch } = useGlobals();
     const ButtonMode = state.isTransparent ? "contained-tonal" : "contained";
-    const [isLoading, setIsLoading] = useState(true);
-    const nav = useNavigation<typeUseNavigation>();
 
-    const handleImageLoad = () => {
-        setIsLoading(false);
-    };
-    // console.log(props.item);
-    // console.log("id: ", props.item.id);
-    // return <ActivityIndicator animating={true} />;
-    // const onSingleTapEvent = (event) => {
-    //     dispatch({ type: "setActivePost", payload: props.item });
-    //     // setTimeout(() => {
-    //     nav.navigate("(post)", { screen: `Post:${props.item.id}` });
-    // };
-
-    const onSingleTapEvent = (event: any) => {
-        console.log(event.nativeEvent.state);
-        // if (event.nativeEvent.state === State.ACTIVE) {
-        //   alert('Hey single tap!');
-        // }
-    };
     return (
         <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => {
                 // setTimeout(() => {
-                dispatch({ type: "setActivePost", payload: props.item });
+                // dispatch({ type: "setActivePost", payload: props.item });
 
-                nav.navigate("(post)", { screen: `Post:${props.item.id}` });
+                navigation.navigate("(post)", { screen: "PostOverview", params: { post_data: item } });
                 // }, 2000);
             }}>
-            <Card mode="elevated" key={props.item.id}>
+            <Card mode="elevated" key={item.id}>
                 <Card.Title
                     titleStyle={{ paddingBottom: 10, paddingTop: 20 }}
                     titleVariant="bodyLarge"
-                    title={props.item.title}
+                    title={item.title}
                     subtitleVariant="labelLarge"
                     // subtitleStyle={{ paddingVertical: 10 }}
                     // subtitle={props.item.url}
                 />
                 <Card.Content>
-                    <Card.Cover style={{ zIndex: 0 }} source={{ uri: props.item.imageThumbnail }} onLoadEnd={handleImageLoad} />
+                    <Card.Cover style={{ zIndex: 0 }} source={{ uri: item.imageThumbnail }} />
                     {/*  */}
                     {/* {isLoading && <ActivityIndicator style={{ paddingVertical: 95 }} animating={true} />} */}
                     {/* {isLoading && (
@@ -129,16 +109,16 @@ function ArticleLargeHome(props: Props) {
                         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                             <View style={{ flexDirection: "column" }}>
                                 <Text variant="labelLarge" style={{ paddingTop: 15 }}>
-                                    {props.item.local_date}
+                                    {item.local_date}
                                 </Text>
                                 <Text variant="labelMedium" style={{ paddingBottom: 15 }}>
-                                    {`By: ${props.item.author.name}`}
+                                    {`By: ${item.author.name}`}
                                 </Text>
                             </View>
 
                             <View style={{ alignSelf: "center", justifyContent: "center", alignContent: "center", flexWrap: "wrap" }}>
                                 <Chip textStyle={{ textTransform: "uppercase" }} icon={"information"}>
-                                    {props.item.type}
+                                    {item.type}
                                 </Chip>
                             </View>
                         </View>
@@ -185,7 +165,7 @@ function TextHome({
         </View>
     );
 }
-function ArticleCarouselHome() {
+function ArticleCarouselHome({ navigation, route }: RootScreenProps) {
     const { state } = useGlobals();
     // const isCarousel = useRef(null);
     const ButtonMode = state.isTransparent ? "contained-tonal" : "contained";
@@ -213,7 +193,7 @@ function ArticleCarouselHome() {
                 data={PostDataArray()}
                 scrollAnimationDuration={500}
                 // onSnapToItem={(index) => console.log("current index:", index, width)}
-                renderItem={(props: Props) => ArticleLargeHome(props)}
+                renderItem={(props: CarouselProps) => ArticleLargeHome({ navigation, route, ...props })}
                 // snapEnabled={true}
                 mode="parallax"
                 panGestureHandlerProps={{
@@ -232,7 +212,7 @@ function PostDataArray(): any {
     return data_SMANDA_APP?.artikel;
 }
 
-function ButtonHomeComp() {
+function ButtonHomeComp({ navigation }: PropsOptional) {
     const { state } = useGlobals();
     const ButtonMode = "elevated";
     const tema = useTheme();
@@ -247,6 +227,7 @@ function ButtonHomeComp() {
                             icon="school"
                             mode={ButtonMode}
                             style={[styles.buttonHome, { flex: 1 }]}
+                            onPress={() => navigation.navigate("(tabs)", { screen: "School" })}
                             contentStyle={[styles.buttonHomeContent]}>
                             Sekolah
                         </Button>
@@ -254,7 +235,7 @@ function ButtonHomeComp() {
                             <View style={{ flex: 1 }}>
                                 <Surface style={styles.buttonHome}>
                                     <IconButton
-                                        style={[{ alignSelf: "center" }]}
+                                        style={[{ alignSelf: "center", height: 50 }]}
                                         // onPress={() => alert("dipencet!")}
                                         // mode={ButtonMode}
                                         icon={"bus-school"}
@@ -262,6 +243,9 @@ function ButtonHomeComp() {
                                         containerColor={tema.colors.elevation.level1}
                                     />
                                 </Surface>
+                                <View style={{ alignItems: "center" }}>
+                                    <Text>Hallo</Text>
+                                </View>
                             </View>
 
                             {/* <View style={{ flex: Platform.OS == "ios" ? 0.2 : 0.5 }} /> */}
@@ -269,7 +253,7 @@ function ButtonHomeComp() {
                             <View style={{ flex: 1 }}>
                                 <Surface style={styles.buttonHome}>
                                     <IconButton
-                                        style={[{ alignSelf: "center" }]}
+                                        style={[{ alignSelf: "center", height: 50 }]}
                                         // onPress={() => alert("dipencet!")}
                                         // mode={ButtonMode}
                                         icon={"account-box-multiple"}
@@ -277,6 +261,9 @@ function ButtonHomeComp() {
                                         containerColor={tema.colors.elevation.level1}
                                     />
                                 </Surface>
+                                <View style={{ alignItems: "center" }}>
+                                    <Text>Hallo</Text>
+                                </View>
                             </View>
                         </View>
                     </View>
@@ -284,17 +271,18 @@ function ButtonHomeComp() {
                     <View style={{ flex: 1 }}>
                         <Button
                             // onPress={() => alert("dipencet!")}
-                            icon="book"
+                            icon="forum"
                             mode={ButtonMode}
                             style={[styles.buttonHome, { flex: 1 }]}
+                            onPress={() => navigation.navigate("(tabs)", { screen: "Information" })}
                             contentStyle={[styles.buttonHomeContent]}>
-                            Artikel
+                            Informasi
                         </Button>
                         <View style={{ flex: 1, flexDirection: "row" }}>
                             <View style={{ flex: 1 }}>
                                 <Surface style={styles.buttonHome}>
                                     <IconButton
-                                        style={[{ alignSelf: "center" }]}
+                                        style={[{ alignSelf: "center", height: 50 }]}
                                         // onPress={() => alert("dipencet!")}
                                         // mode={ButtonMode}
                                         icon={"chair-school"}
@@ -302,12 +290,15 @@ function ButtonHomeComp() {
                                         containerColor={tema.colors.elevation.level1}
                                     />
                                 </Surface>
+                                <View style={{ alignItems: "center" }}>
+                                    <Text>Hallo</Text>
+                                </View>
                             </View>
                             <View style={{ flex: 0.2 }} />
                             <View style={{ flex: 1 }}>
                                 <Surface style={styles.buttonHome}>
                                     <IconButton
-                                        style={[{ alignSelf: "center" }]}
+                                        style={[{ alignSelf: "center", height: 50 }]}
                                         // onPress={() => alert("dipencet!")}
                                         // mode={ButtonMode}
                                         icon={"anchor"}
@@ -315,6 +306,9 @@ function ButtonHomeComp() {
                                         containerColor={tema.colors.elevation.level1}
                                     />
                                 </Surface>
+                                <View style={{ alignItems: "center" }}>
+                                    <Text>Hallo</Text>
+                                </View>
                             </View>
                         </View>
                     </View>

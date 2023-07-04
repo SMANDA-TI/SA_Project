@@ -1,10 +1,10 @@
 import { View, SafeAreaView } from "react-native";
-import { RootScreenProps, typeUseNavigation } from "../../types/RootType";
+import { PropsOptional, RootScreenProps, typeUseNavigation } from "../../types/RootType";
 import { useNavigation } from "@react-navigation/native";
 import { Text, Button } from "react-native-paper";
 import { useGlobals } from "../../context/RootContext";
 
-export function InformationScreen(props: RootScreenProps) {
+export function InformationScreen({ navigation }: PropsOptional) {
     // const nav = useNavigation<typeUseNavigation>();
     const { state, dispatch } = useGlobals();
     return (
@@ -13,9 +13,9 @@ export function InformationScreen(props: RootScreenProps) {
                 <Text>Informasi!</Text>
                 <Button
                     onPress={() => {
-                        props.navigation.navigate("(post)");
+                        navigation.goBack();
                     }}>
-                    Click
+                    Go Back
                 </Button>
             </View>
         </SafeAreaView>

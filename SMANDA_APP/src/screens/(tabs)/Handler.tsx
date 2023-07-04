@@ -8,7 +8,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { CommonActions } from "@react-navigation/native";
 import { HomeScreen } from "./Home";
 import { InformationScreen } from "./Information";
-import { EventScreen } from "./Event";
+import { SchoolScreen } from "./School";
 import { SettingsScreen } from "./Settings";
 import { AppHeaderComponent } from "../../components/AppHeaderComponent";
 
@@ -71,14 +71,14 @@ export function MyTabs() {
                 }}
             />
             <Tab.Screen
-                name="Event"
-                component={EventScreen}
+                name="School"
+                component={SchoolScreen}
                 options={{
-                    tabBarLabel: "Event",
+                    tabBarLabel: "Sekolah",
                     tabBarIcon: ({ color, size }) => {
                         return <MaterialCommunityIcons name="school" size={size} color={color} />;
                     },
-                    header: () => <AppHeaderComponent Title="Event" />,
+                    header: () => <AppHeaderComponent Title="School" />,
                 }}
             />
             <Tab.Screen
