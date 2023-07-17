@@ -1,8 +1,10 @@
 import "react-native-gesture-handler";
 import { Main } from "./src/index";
-import { initialState, reducer, StateProvider } from "./src/context/RootContext";
-import * as ScreenOrientation from "expo-screen-orientation";
+import smandaStore from "./src/context/ReduxData";
+// import * as ScreenOrientation from "expo-screen-orientation";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { DataProvider, itemReducer, InitialState } from "./src/context/DataSMANDA";
+import { Provider } from "react-redux";
 
 // import * as SplashScreen from "expo-splash-screen";
 
@@ -11,13 +13,13 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 // import { registerRootComponent } from "expo";
 
 function App() {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT);
+    // ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT);
     return (
-        <StateProvider initialState={initialState} reducer={reducer}>
+        <Provider store={smandaStore}>
             <SafeAreaProvider>
                 <Main />
             </SafeAreaProvider>
-        </StateProvider>
+        </Provider>
     );
 }
 

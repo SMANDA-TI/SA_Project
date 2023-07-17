@@ -1,29 +1,28 @@
+import { View, StyleSheet, useWindowDimensions, Image, StyleProp, TextStyle } from "react-native";
+import { RootTabScreenProps, TabNavigationProps } from "../../types/RootType";
 import {
-    View,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    ImageBackground,
-    useWindowDimensions,
-    Dimensions,
-    Platform,
-    StyleProp,
-    TextStyle,
-} from "react-native";
-import { DKRootScreenProps, NavigationProp, PropsOptional, RootScreenProps, typeUseNavigation } from "../../types/RootType";
-import { Text, Button, Searchbar, List, Card, Chip, IconButton, useTheme, Surface, TouchableRipple } from "react-native-paper";
+    Text,
+    Button,
+    List,
+    Card,
+    Chip,
+    IconButton,
+    useTheme,
+    Surface,
+    TouchableRipple,
+} from "react-native-paper";
 // import { SearchBar } from "../../components/SearchBar";
-import ScreenWrapper from "../../components/ScreenWrapper";
-import { useGlobals } from "../../context/RootContext";
 // import { LinearGradient } from "expo-linear-gradient";
 import { useState, useRef } from "react";
-import DefaultView from "../../components/DefaultContainerView";
 import Carousel from "react-native-reanimated-carousel";
 import type { ICarouselInstance } from "react-native-reanimated-carousel";
-import { GestureHandlerRootView, TouchableOpacity } from "react-native-gesture-handler";
+import { GestureHandlerRootView, TouchableOpacity, ScrollView } from "react-native-gesture-handler";
 import { MappedPostData } from "../../types/PostTypes";
 import { CarouselRenderItemInfo } from "react-native-reanimated-carousel/lib/typescript/types";
 import { SearchButton } from "../../components/SearchButton";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { getTransparent } from "../../context/Slicer/GlobalEnvironment";
+import { getArticleLatest } from "../../context/Slicer/WordpressProvider";
 
 // * Random Words Generator nih bang
 // const words = ["Artikel", "Mantap", "Aku", "🎉", "👋"];
@@ -32,13 +31,15 @@ import { SearchButton } from "../../components/SearchButton";
 //     const randomIndex = Math.floor(Math.random() * words.length);
 //     return words[randomIndex];
 // }
-type Props = RootScreenProps & CarouselRenderItemInfo<MappedPostData>;
-type CarouselProps = RootScreenProps & CarouselRenderItemInfo<MappedPostData>;
+type Props = RootTabScreenProps<"Home"> & CarouselRenderItemInfo<MappedPostData>;
+type CarouselProps = RootTabScreenProps<"Home"> & CarouselRenderItemInfo<MappedPostData>;
+const APP_LOGO = require("../../../assets/images/Profile_Logo_SMANDA_APP.png");
 
-export function HomeScreen(props: RootScreenProps) {
-    const [searchQuery, setSearchQuery] = useState("");
-    const onChangeSearch = (query) => setSearchQuery(query);
-    searchQuery != null && searchQuery != undefined && searchQuery != "" && console.log(searchQuery);
+type JustNavigation = {
+    navigation: RootTabScreenProps<"Home">["navigation"];
+};
+
+export function HomeScreen(props: RootTabScreenProps<"Home">) {
     return (
         // <DefaultView>
         <GestureHandlerRootView>
@@ -51,9 +52,12 @@ export function HomeScreen(props: RootScreenProps) {
                     // flexWrap: "nowrap",
                 }}
                 removeClippedSubviews={true}>
-                {/* <Text style={{ fontFamily: "Belanosima-SemiBold", fontSize: 20 }}>Belanosima</Text> */}
-                <SearchButton navigation={props.navigation} route={props.route} />
-                {/* <Text style={{ fontFamily: "Belanosima-SemiBold", fontSize: 20 }}>Beranda!</Text> */}
+                <InitComponent />
+                <SchoolInformationButton navigation={props.navigation} />
+                <FirstText />
+                <SearchButton />
+                <CardIndicator navigation={props.navigation} />
+                <NewestNews navigation={props.navigation} />
                 <ButtonHomeComp navigation={props.navigation} />
                 <ArticleCarouselHome navigation={props.navigation} route={props.route} />
             </ScrollView>
@@ -63,18 +67,69 @@ export function HomeScreen(props: RootScreenProps) {
     );
 }
 
-function ArticleLargeHome({ navigation, route, item, index, animationValue }: Props) {
-    const { state, dispatch } = useGlobals();
-    const ButtonMode = state.isTransparent ? "contained-tonal" : "contained";
+function InitComponent() {
+    return (
+        <View style={{ marginTop: 20 }}>
+            <Surface elevation={2} style={{ borderRadius: 20, flex: 1 }}>
+                <Surface
+                    elevation={3}
+                    style={{
+                        flex: 1,
+                        flexDirection: "row",
+                        height: 200,
+                        borderRadius: 15,
+                        margin: 15,
+                    }}>
+                    <View style={{ flex: 1, margin: 15 }}>
+                        <Image
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                            }}
+                            resizeMode="contain"
+                            source={require("../../../assets/images/Logo-Smanda.png")}
+                        />
+                    </View>
+                    <View style={{ flex: 1, margin: 15 }}>
+                        <Image
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                            }}
+                            resizeMode="contain"
+                            source={APP_LOGO}
+                        />
+                    </View>
+                </Surface>
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginBottom: 15,
+                    }}>
+                    <Text variant="titleLarge">{"SMAN 2 KUNINGAN"}</Text>
+                    <Text variant="titleMedium">{"SMANDA APP"}</Text>
+                </View>
+            </Surface>
+        </View>
+    );
+}
 
+function ArticleLargeHome({ navigation, route, item, index, animationValue }: Props) {
+    const isTransparent = getTransparent();
+    const ButtonMode = isTransparent ? "contained-tonal" : "contained";
     return (
         <TouchableOpacity
-            activeOpacity={0.8}
+            // activeOpacity={0.8}
             onPress={() => {
                 // setTimeout(() => {
                 // dispatch({ type: "setActivePost", payload: props.item });
 
-                navigation.navigate("(post)", { screen: "PostOverview", params: { post_data: item } });
+                navigation.navigate("(wordpress)", {
+                    screen: "PostOverview",
+                    params: { post_data: item },
+                });
                 // }, 2000);
             }}>
             <Card mode="elevated" key={item.id}>
@@ -116,8 +171,16 @@ function ArticleLargeHome({ navigation, route, item, index, animationValue }: Pr
                                 </Text>
                             </View>
 
-                            <View style={{ alignSelf: "center", justifyContent: "center", alignContent: "center", flexWrap: "wrap" }}>
-                                <Chip textStyle={{ textTransform: "uppercase" }} icon={"information"}>
+                            <View
+                                style={{
+                                    alignSelf: "center",
+                                    justifyContent: "center",
+                                    alignContent: "center",
+                                    flexWrap: "wrap",
+                                }}>
+                                <Chip
+                                    textStyle={{ textTransform: "uppercase" }}
+                                    icon={"information"}>
                                     {item.type}
                                 </Chip>
                             </View>
@@ -126,7 +189,11 @@ function ArticleLargeHome({ navigation, route, item, index, animationValue }: Pr
                         {/* <Button mode={ButtonMode} contentStyle={{ height: 50 }} style={{ margin: 10, borderRadius: 15 }}>
                         Baca Artikel
                     </Button> */}
-                        <Button style={{ borderRadius: 10 }} contentStyle={{ height: 50 }} labelStyle={{ fontSize: 15 }} mode={ButtonMode}>
+                        <Button
+                            style={{ borderRadius: 10 }}
+                            contentStyle={{ height: 50 }}
+                            labelStyle={{ fontSize: 15 }}
+                            mode={ButtonMode}>
                             Baca Artikel
                             {/* <Text variant="titleMedium" style={{ color: tema.colors.onPrimary }}>
                         Get Started
@@ -159,111 +226,552 @@ function TextHome({
         <View style={{ flex: 1 }}>
             <Text
                 variant={Type_Where == "hb" ? "titleMedium" : null}
-                style={[style, { color: Type_Where == "hb" ? tema.colors.outline : null, paddingTop: 15 }]}>
+                style={[
+                    style,
+                    { color: Type_Where == "hb" ? tema.colors.outline : null, paddingTop: 15 },
+                ]}>
                 {title}
             </Text>
         </View>
     );
 }
-function ArticleCarouselHome({ navigation, route }: RootScreenProps) {
-    const { state } = useGlobals();
+function ArticleCarouselHome({ navigation, route }: RootTabScreenProps<"Home">) {
+    const isTransparent = getTransparent();
+
     // const isCarousel = useRef(null);
-    const ButtonMode = state.isTransparent ? "contained-tonal" : "contained";
+    const ButtonMode = isTransparent ? "contained-tonal" : "contained";
     // const [width, setWidth] = useState(0);
     const { width, height } = useWindowDimensions();
     // const width = Dimensions.get("win,dow").width;
     const ref = useRef<ICarouselInstance>(null);
     return (
-        <View style={{ flex: 1, overflow: "visible" }}>
+        <>
+            <View style={{ marginTop: 40 }}>
+                <Text variant="headlineLarge">{"Artikel Terbaru"}</Text>
+            </View>
             <Carousel
                 style={{
                     alignSelf: "center",
-                    // paddingBottom: 350
+                    // paddingBottom: 350,
                     overflow: "visible",
                     // height: 240,
+                    flex: 1,
                 }}
-                modeConfig={{ parallaxScrollingScale: 0.85, parallaxScrollingOffset: 75 }}
+                modeConfig={{
+                    parallaxScrollingScale: 0.85,
+                    parallaxScrollingOffset: 70,
+                }}
                 loop
                 ref={ref}
                 // pagingEnabled={true}
                 width={width}
-                height={width}
+                height={360}
                 autoPlay={true}
                 autoPlayInterval={3000}
                 data={PostDataArray()}
                 scrollAnimationDuration={500}
-                // onSnapToItem={(index) => console.log("current index:", index, width)}
-                renderItem={(props: CarouselProps) => ArticleLargeHome({ navigation, route, ...props })}
+                renderItem={(props: CarouselProps) =>
+                    ArticleLargeHome({ navigation, route, ...props })
+                }
                 // snapEnabled={true}
                 mode="parallax"
                 panGestureHandlerProps={{
                     activeOffsetX: [-10, 10],
                 }}
             />
-        </View>
+        </>
     );
 }
 
 function PostDataArray(): any {
-    const { state } = useGlobals();
-    const { data_SMANDA_APP } = state;
-    // let ArtikelArray = [];
-    // data_SMANDA_APP.artikel.map((obj) => {})
-    return data_SMANDA_APP?.artikel;
+    const artikelLatest = getArticleLatest();
+    return artikelLatest;
 }
 
-function ButtonHomeComp({ navigation }: PropsOptional) {
-    const { state } = useGlobals();
+function FirstText() {
+    return (
+        <>
+            <View style={{ marginVertical: 20 }}>
+                <Text variant="titleLarge">{"Apa Sih SMANDA APP itu 🤔?"}</Text>
+            </View>
+            <View style={{ marginBottom: 20 }}>
+                <Surface style={{ borderRadius: 20, height: 175 }}>
+                    <View style={{ flex: 1, flexDirection: "row" }}>
+                        <View
+                            style={{
+                                flex: 1.2,
+                                padding: 20,
+                                paddingTop: 15,
+                                paddingRight: 0,
+                                justifyContent: "center",
+                            }}>
+                            <Text variant="bodyLarge" style={{ marginBottom: 10 }}>
+                                SMANDA APP
+                            </Text>
+                            <Text style={{ lineHeight: 20 }}>
+                                {
+                                    /* cspell: disable-next-line */
+                                    "Aplikasi mobile yang digunakan untuk berbagi informasi dan pendidikan tentang SMAN 2 Kuningan."
+                                }
+                            </Text>
+                        </View>
+                        <View style={{ flex: 1, margin: 20 }}>
+                            <Image
+                                style={{
+                                    width: "100%",
+                                    height: "100%",
+                                }}
+                                resizeMode="contain"
+                                source={APP_LOGO}
+                            />
+                        </View>
+                    </View>
+                </Surface>
+            </View>
+        </>
+    );
+}
+
+function NewestNews({ navigation }: JustNavigation) {
+    return (
+        <>
+            <View style={{ marginTop: 40 }}>
+                <Text variant="headlineLarge">{"Informasi Terbaru"}</Text>
+            </View>
+            <View style={{ marginTop: 20 }}>
+                <Surface style={{ borderRadius: 20, height: 175 }}>
+                    <View style={{ flex: 1, flexDirection: "row" }}>
+                        <View
+                            style={{
+                                flex: 1.2,
+                                padding: 20,
+                                paddingTop: 15,
+                                paddingRight: 0,
+                                justifyContent: "center",
+                            }}>
+                            <Text variant="bodyLarge" style={{ marginBottom: 10 }}>
+                                SMANDA APP
+                            </Text>
+                            <Text style={{ lineHeight: 20 }}>
+                                {
+                                    /* cspell: disable-next-line */
+                                    "Aplikasi mobile yang digunakan untuk berbagi informasi dan pendidikan tentang SMAN 2 Kuningan."
+                                }
+                            </Text>
+                        </View>
+                        <View style={{ flex: 1, margin: 20 }}>
+                            <Image
+                                style={{
+                                    width: "100%",
+                                    height: "100%",
+                                }}
+                                resizeMode="contain"
+                                source={APP_LOGO}
+                            />
+                        </View>
+                    </View>
+                </Surface>
+            </View>
+        </>
+    );
+}
+
+function SchoolInformationButton({ navigation }: JustNavigation) {
+    const ButtonMode = "elevated";
+    const [tips, setTips] = useState(true);
+    const tema = useTheme();
+    const OnPressTips = () => {
+        setTips(false);
+    };
+    return (
+        <View style={{ flex: 1, marginVertical: 15 }}>
+            {/* <View style={{ marginVertical: 20 }}>
+                <Text style={{ fontSize: 50, textAlign: "center" }} variant="displayLarge">
+                    {"Selamat Datang!"}
+                </Text>
+            </View> */}
+            <List.Section titleStyle={{ paddingLeft: 0, paddingTop: 0 }} title="Quick Actions">
+                <View style={{ flex: 1, flexDirection: "row" }}>
+                    <View style={{ flex: 1 }}>
+                        <Button
+                            // onPress={() => alert("dipencet!")}
+                            icon={({ size, color }) => (
+                                <MaterialCommunityIcons name="school" size={22} color={color} />
+                            )}
+                            mode={ButtonMode}
+                            style={[styles.buttonHome, { flex: 1 }]}
+                            labelStyle={{ fontSize: 17 }}
+                            onPress={() => navigation.navigate("(tabs)", { screen: "School" })}
+                            contentStyle={[styles.buttonHomeContentLarge]}>
+                            Sekolah
+                        </Button>
+                    </View>
+                    <View style={{ flex: 0.08 }} />
+                    <View style={{ flex: 1 }}>
+                        <Button
+                            // onPress={() => alert("dipencet!")}
+                            icon={({ size, color }) => (
+                                <MaterialCommunityIcons name="forum" size={22} color={color} />
+                            )}
+                            mode={ButtonMode}
+                            style={[styles.buttonHome, { flex: 1 }]}
+                            labelStyle={{ fontSize: 17 }}
+                            onPress={() => navigation.navigate("(tabs)", { screen: "Information" })}
+                            contentStyle={[styles.buttonHomeContentLarge]}>
+                            Informasi
+                        </Button>
+                    </View>
+                </View>
+                {tips && (
+                    <View style={{ flex: 1, marginTop: 5 }}>
+                        <Surface
+                            elevation={3}
+                            style={{
+                                flex: 1,
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                borderRadius: 10,
+                            }}>
+                            <Text style={{ flex: 3, padding: 13 }}>
+                                {
+                                    /* cspell: disable-next-line */
+                                    "Silakan tekan tombol di atas untuk menuju ke halaman terkait."
+                                }
+                            </Text>
+                            <View style={{ flex: 0.6 }}>
+                                <IconButton icon="close" size={20} onPress={OnPressTips} />
+                            </View>
+                        </Surface>
+                    </View>
+                )}
+            </List.Section>
+        </View>
+    );
+}
+
+function CardIndicator({ navigation }: JustNavigation) {
+    const [isJourney, setJourney] = useState(true);
+    const tema = useTheme();
+    const onPressJourney = () => {
+        setJourney(false);
+    };
+
+    return (
+        isJourney && (
+            <>
+                <View
+                    style={{
+                        flex: 1,
+                        marginTop: 40,
+                        marginBottom: 20,
+                        justifyContent: "space-between",
+                        flexDirection: "row",
+                    }}>
+                    <Text variant="headlineLarge">{"Your Journey"}</Text>
+                    <IconButton icon="close" size={20} onPress={onPressJourney} />
+                </View>
+                <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+                        <View>
+                            <IconButton
+                                style={{ alignItems: "flex-start", marginRight: -5 }}
+                                icon="checkbox-blank-circle-outline"
+                                size={25}
+                            />
+                            <View
+                                style={{
+                                    position: "absolute",
+                                    top: 35,
+                                    left: 18,
+                                    right: 0,
+                                    backgroundColor: tema.colors.onSurfaceVariant,
+                                    width: 2,
+                                    height: 188,
+                                    marginRight: 5,
+                                    zIndex: 0,
+                                }}
+                            />
+                        </View>
+                        <Card
+                            style={{ borderRadius: 20, height: 175, flex: 1 }}
+                            onPress={() => navigation.navigate("(tabs)", { screen: "School" })}>
+                            <View style={{ flexDirection: "row-reverse" }}>
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        padding: 20,
+                                        paddingTop: 15,
+                                        paddingRight: 0,
+                                        justifyContent: "center",
+                                    }}>
+                                    <Text
+                                        variant="titleLarge"
+                                        style={{ marginBottom: 10, marginRight: 10 }}>
+                                        Melihat tab Sekolah
+                                    </Text>
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            marginBottom: 4,
+                                        }}>
+                                        <MaterialCommunityIcons
+                                            style={{ marginRight: 5 }}
+                                            name="school-outline"
+                                            size={20}
+                                            color={tema.colors.onSurfaceVariant}
+                                        />
+                                        <Text>Sekolah</Text>
+                                    </View>
+                                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                        <MaterialCommunityIcons
+                                            style={{ marginRight: 5 }}
+                                            name="clock-time-eight-outline"
+                                            size={20}
+                                            color={tema.colors.onSurfaceVariant}
+                                        />
+                                        <Text>3-10 menit</Text>
+                                    </View>
+                                </View>
+                                <View style={{ flex: 1, margin: 20 }}>
+                                    <Image
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            borderRadius: 15,
+                                        }}
+                                        resizeMode="cover"
+                                        source={require("../../../assets/images/smandaku-lobby-buriq.jpg")}
+                                    />
+                                </View>
+                            </View>
+                        </Card>
+                    </View>
+                    <View
+                        style={{
+                            flex: 1,
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginTop: 30,
+                        }}>
+                        <View>
+                            <IconButton
+                                style={{ alignItems: "flex-start", marginRight: -5 }}
+                                icon="checkbox-blank-circle-outline"
+                                size={25}
+                            />
+                            <View
+                                style={{
+                                    position: "absolute",
+                                    top: 35,
+                                    left: 18,
+                                    right: 0,
+                                    backgroundColor: tema.colors.onSurfaceVariant,
+                                    width: 2,
+                                    height: 188,
+                                    marginRight: 5,
+                                    zIndex: 0,
+                                }}
+                            />
+                        </View>
+
+                        <Card
+                            style={{ borderRadius: 20, height: 175, flex: 1 }}
+                            onPress={() =>
+                                navigation.navigate("(tabs)", { screen: "Information" })
+                            }>
+                            <View style={{ flexDirection: "row" }}>
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        padding: 20,
+                                        paddingTop: 15,
+                                        paddingRight: 0,
+                                        justifyContent: "center",
+                                    }}>
+                                    <Text variant="titleLarge" style={{ marginBottom: 10 }}>
+                                        Membaca Informasi
+                                    </Text>
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            marginBottom: 4,
+                                        }}>
+                                        <MaterialCommunityIcons
+                                            style={{ marginRight: 5 }}
+                                            name="forum-outline"
+                                            size={20}
+                                            color={tema.colors.onSurfaceVariant}
+                                        />
+                                        <Text>Informasi</Text>
+                                    </View>
+                                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                        <MaterialCommunityIcons
+                                            style={{ marginRight: 5 }}
+                                            name="clock-time-eight-outline"
+                                            size={20}
+                                            color={tema.colors.onSurfaceVariant}
+                                        />
+                                        <Text>2-6 menit</Text>
+                                    </View>
+                                </View>
+                                <View style={{ flex: 1, margin: 20 }}>
+                                    <Image
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            borderRadius: 15,
+                                        }}
+                                        resizeMode="cover"
+                                        source={require("../../../assets/images/smandaku-sejarah.jpg")}
+                                    />
+                                </View>
+                            </View>
+                        </Card>
+                    </View>
+                    <View
+                        style={{
+                            flex: 1,
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginTop: 30,
+                        }}>
+                        <View>
+                            <IconButton
+                                style={{ alignItems: "flex-start", marginRight: -5 }}
+                                icon="checkbox-blank-circle-outline"
+                                size={25}
+                            />
+                        </View>
+
+                        <Card
+                            style={{ borderRadius: 20, height: 175, flex: 1 }}
+                            onPress={() => navigation.navigate("(tabs)", { screen: "Article" })}>
+                            <View style={{ flexDirection: "row-reverse" }}>
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        padding: 20,
+                                        paddingTop: 15,
+                                        paddingRight: 0,
+                                        justifyContent: "center",
+                                    }}>
+                                    <Text variant="titleLarge" style={{ marginBottom: 10 }}>
+                                        Membaca Artikel
+                                    </Text>
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            marginBottom: 4,
+                                        }}>
+                                        <MaterialCommunityIcons
+                                            style={{ marginRight: 5 }}
+                                            name="newspaper-variant-outline"
+                                            size={20}
+                                            color={tema.colors.onSurfaceVariant}
+                                        />
+                                        <Text>Artikel</Text>
+                                    </View>
+                                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                        <MaterialCommunityIcons
+                                            style={{ marginRight: 5 }}
+                                            name="clock-time-eight-outline"
+                                            size={20}
+                                            color={tema.colors.onSurfaceVariant}
+                                        />
+                                        <Text>3-5 menit</Text>
+                                    </View>
+                                </View>
+                                <View style={{ flex: 1, margin: 20 }}>
+                                    <Image
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            borderRadius: 15,
+                                        }}
+                                        resizeMode="cover"
+                                        source={require("../../../assets/images/smandaku_sunset-buriq.jpg")}
+                                    />
+                                </View>
+                            </View>
+                        </Card>
+                    </View>
+                </View>
+            </>
+        )
+    );
+}
+
+function ButtonHomeComp({ navigation }: JustNavigation) {
     const ButtonMode = "elevated";
     const tema = useTheme();
     return (
-        <View style={{ flex: 1, marginBottom: 10 }}>
+        <View style={{ marginBottom: 10, marginTop: 5 }}>
             <List.Section titleStyle={{ paddingLeft: 0 }} title="Quick Actions">
                 {/* <TextHome title="Quick Action" type="heading" where="between" style={{ paddingBottom: 10 }} /> */}
                 <View style={{ flex: 1, flexDirection: "row" }}>
                     <View style={{ flex: 1 }}>
                         <Button
                             // onPress={() => alert("dipencet!")}
-                            icon="school"
+                            icon="book-education"
                             mode={ButtonMode}
                             style={[styles.buttonHome, { flex: 1 }]}
-                            onPress={() => navigation.navigate("(tabs)", { screen: "School" })}
+                            onPress={() => navigation.navigate("(tabs)", { screen: "Information" })}
                             contentStyle={[styles.buttonHomeContent]}>
-                            Sekolah
+                            PPDB
                         </Button>
                         <View style={{ flex: 1, flexDirection: "row" }}>
                             <View style={{ flex: 1 }}>
-                                <Surface style={styles.buttonHome}>
-                                    <IconButton
-                                        style={[{ alignSelf: "center", height: 50 }]}
-                                        // onPress={() => alert("dipencet!")}
-                                        // mode={ButtonMode}
-                                        icon={"bus-school"}
-                                        iconColor={tema.colors.primary}
-                                        containerColor={tema.colors.elevation.level1}
-                                    />
-                                </Surface>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.navigate("(wordpress)", {
+                                            screen: "GuruOverview",
+                                        });
+                                    }}>
+                                    <Surface style={styles.buttonHome}>
+                                        <IconButton
+                                            style={[{ alignSelf: "center", height: 50 }]}
+                                            // onPress={() => alert("dipencet!")}
+                                            // mode={ButtonMode}
+                                            icon={"card-account-details-outline"}
+                                            iconColor={tema.colors.primary}
+                                            containerColor={tema.colors.elevation.level1}
+                                        />
+                                    </Surface>
+                                </TouchableOpacity>
                                 <View style={{ alignItems: "center" }}>
-                                    <Text>Hallo</Text>
+                                    <Text style={{ position: "absolute", textAlign: "center" }}>
+                                        Pendidik
+                                    </Text>
                                 </View>
                             </View>
 
                             {/* <View style={{ flex: Platform.OS == "ios" ? 0.2 : 0.5 }} /> */}
-                            <View style={{ flex: 0.2 }} />
+                            <View style={{ flex: 0.1 }} />
                             <View style={{ flex: 1 }}>
-                                <Surface style={styles.buttonHome}>
-                                    <IconButton
-                                        style={[{ alignSelf: "center", height: 50 }]}
-                                        // onPress={() => alert("dipencet!")}
-                                        // mode={ButtonMode}
-                                        icon={"account-box-multiple"}
-                                        iconColor={tema.colors.primary}
-                                        containerColor={tema.colors.elevation.level1}
-                                    />
-                                </Surface>
-                                <View style={{ alignItems: "center" }}>
-                                    <Text>Hallo</Text>
-                                </View>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.navigate("(tabs)", {
+                                            screen: "School",
+                                            params: { scrollTo: "Filosofi" },
+                                        });
+                                    }}>
+                                    <Surface style={styles.buttonHome}>
+                                        <IconButton
+                                            style={[{ alignSelf: "center", height: 50 }]}
+                                            // mode={ButtonMode}
+                                            icon={"account-group"}
+                                            iconColor={tema.colors.primary}
+                                            containerColor={tema.colors.elevation.level1}
+                                        />
+                                    </Surface>
+                                    <View style={{ alignItems: "center" }}>
+                                        <Text>{"Filosofi\n"}</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
@@ -271,44 +779,68 @@ function ButtonHomeComp({ navigation }: PropsOptional) {
                     <View style={{ flex: 1 }}>
                         <Button
                             // onPress={() => alert("dipencet!")}
-                            icon="forum"
+                            icon="book-information-variant"
                             mode={ButtonMode}
                             style={[styles.buttonHome, { flex: 1 }]}
                             onPress={() => navigation.navigate("(tabs)", { screen: "Information" })}
                             contentStyle={[styles.buttonHomeContent]}>
-                            Informasi
+                            PLS
                         </Button>
                         <View style={{ flex: 1, flexDirection: "row" }}>
                             <View style={{ flex: 1 }}>
-                                <Surface style={styles.buttonHome}>
-                                    <IconButton
-                                        style={[{ alignSelf: "center", height: 50 }]}
-                                        // onPress={() => alert("dipencet!")}
-                                        // mode={ButtonMode}
-                                        icon={"chair-school"}
-                                        iconColor={tema.colors.primary}
-                                        containerColor={tema.colors.elevation.level1}
-                                    />
-                                </Surface>
-                                <View style={{ alignItems: "center" }}>
-                                    <Text>Hallo</Text>
-                                </View>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.navigate("(tabs)", {
+                                            screen: "School",
+                                            params: { scrollTo: "Lokasi" },
+                                        });
+                                    }}>
+                                    <Surface style={styles.buttonHome}>
+                                        <IconButton
+                                            style={[{ alignSelf: "center", height: 50 }]}
+                                            // onPress={() => alert("dipencet!")}
+                                            // mode={ButtonMode}
+                                            icon={"map-marker-radius-outline"}
+                                            iconColor={tema.colors.primary}
+                                            containerColor={tema.colors.elevation.level1}
+                                        />
+                                    </Surface>
+                                    <View
+                                        style={{
+                                            alignItems: "center",
+                                        }}>
+                                        <Text
+                                            style={{
+                                                textAlign: "center",
+                                            }}>
+                                            Tempat dan Lokasi
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
-                            <View style={{ flex: 0.2 }} />
+                            <View style={{ flex: 0.1 }} />
                             <View style={{ flex: 1 }}>
-                                <Surface style={styles.buttonHome}>
-                                    <IconButton
-                                        style={[{ alignSelf: "center", height: 50 }]}
-                                        // onPress={() => alert("dipencet!")}
-                                        // mode={ButtonMode}
-                                        icon={"anchor"}
-                                        iconColor={tema.colors.primary}
-                                        containerColor={tema.colors.elevation.level1}
-                                    />
-                                </Surface>
-                                <View style={{ alignItems: "center" }}>
-                                    <Text>Hallo</Text>
-                                </View>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.navigate("(tabs)", {
+                                            screen: "School",
+                                            params: { scrollTo: "Denah" },
+                                        });
+                                    }}>
+                                    <Surface style={styles.buttonHome}>
+                                        <IconButton
+                                            style={[{ alignSelf: "center", height: 50 }]}
+                                            // onPress={() => alert("dipencet!")}
+                                            // mode={ButtonMode}
+                                            icon={"apps"}
+                                            iconColor={tema.colors.primary}
+                                            containerColor={tema.colors.elevation.level1}
+                                        />
+                                    </Surface>
+                                    <View style={{ alignItems: "center" }}>
+                                        <Text>{"Denah\n"}</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
@@ -367,5 +899,8 @@ const styles = StyleSheet.create({
     },
     buttonHomeContent: {
         height: 50,
+    },
+    buttonHomeContentLarge: {
+        height: 65,
     },
 });

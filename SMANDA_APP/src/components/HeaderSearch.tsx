@@ -1,20 +1,42 @@
-import { View, Text } from "react-native";
-import React from "react";
+import * as React from "react";
+import { Platform } from "react-native";
 import { Appbar } from "react-native-paper";
+import { useAppDispatch } from "../context/hooks";
+import { getDarkMode, toggleTheme } from "../context/Slicer/GlobalEnvironment";
+import { RootStackScreenProps } from "../types/RootType";
 
-export default function HeaderSearch() {
-    const _goBack = () => console.log("Went back");
+type MenuVisibility = {
+    [key: string]: boolean | undefined;
+};
 
-    const _handleSearch = () => console.log("Searching");
+// const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
+const HeaderPostComp = ({ navigation, route }: RootStackScreenProps<"(search)">) => {
+    const isDarkMode = getDarkMode();
+    const dispatch = useAppDispatch();
+    const [visible, setVisible] = React.useState<MenuVisibility>({});
 
-    const _handleMore = () => console.log("Shown more");
-
+    // const _toggleMenu = (name: string) => () => setVisible({ ...visible, [name]: !visible[name] });
+    // const _getVisible = (name: string) => !!visible[name];
+    const RippleKolor = "rgba(255, 255, 255, 0.3)";
     return (
-        <Appbar.Header>
-            <Appbar.BackAction onPress={_goBack} />
-            <Appbar.Content title="Title" />
-            <Appbar.Action icon="magnify" onPress={_handleSearch} />
-            <Appbar.Action icon="dots-vertical" onPress={_handleMore} />
+        <Appbar.Header mode={"center-aligned"}>
+            <Appbar.BackAction
+                onPress={() => {
+                    navigation.goBack();
+                }}
+            />
+            <Appbar.Content title={"Pencarian"} />
+            <Appbar.Action
+                icon={isDarkMode ? "moon-waning-crescent" : "white-balance-sunny"}
+                size={30}
+                onPress={() => {
+                    // alert("im PRESSED");
+                    // alert(JSON.stringify(state));
+                    dispatch(toggleTheme());
+                }}
+            />
         </Appbar.Header>
     );
-}
+};
+
+export default HeaderPostComp;

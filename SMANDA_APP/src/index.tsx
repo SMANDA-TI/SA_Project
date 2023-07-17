@@ -7,10 +7,14 @@ import { WelcomeScreen } from "./screens/WelcomeScreen";
 import { GetStarted } from "./screens/GetStarted";
 import { MyTabs } from "./screens/(tabs)/Handler";
 import { PaperProvider, configureFonts } from "react-native-paper";
-import { CombinedDarkTheme, CombinedDefaultTheme, PaperDarkThemeCombined, PaperLightThemeCombined } from "./Colors&Themes";
+import {
+    CombinedDarkTheme,
+    CombinedDefaultTheme,
+    PaperDarkThemeCombined,
+    PaperLightThemeCombined,
+} from "./Colors&Themes";
 import { StatusBar } from "expo-status-bar";
-import { useGlobals } from "./context/RootContext";
-import FetchResourceWP from "./backend/FetchPosts";
+import { useAppDispatch } from "./context/hooks";
 // import { useFonts } from "expo-font";
 import {
     useFonts,
@@ -19,33 +23,31 @@ import {
     SignikaNegative_500Medium,
     SignikaNegative_600SemiBold,
     SignikaNegative_700Bold,
-} from "@expo-google-fonts/dev";
+} from "@expo-google-fonts/signika-negative";
 import * as SplashScreen from "expo-splash-screen";
-import PostStack from "./screens/(post)/Handler";
+import WordPressStack from "./screens/(wordpress)/Handler";
 import SearchStack from "./screens/(search)/Handler";
+import { RootStackScreenList } from "./types/RootType";
+import { getDarkMode, getTheme, toggleTheme } from "./context/Slicer/GlobalEnvironment";
+import {
+    saveWPArtikelLatest,
+    saveWPGuru,
+    saveWPS_slides,
+    saveWPArtikel,
+    saveWPEksul,
+    saveWPYoutube,
+    saveWPOrganisasi,
+    saveWPPostPenting,
+    saveWPPosts,
+} from "./context/Slicer/WordpressProvider";
 SplashScreen.preventAutoHideAsync();
 
 export function Main() {
     const [AppReady, setAppReady] = useState(false);
-    const { state, dispatch } = useGlobals();
-    console.log("INFORMATION: ", state);
+    const dispatch = useAppDispatch();
+    const isDarkMode = getDarkMode();
+    const getTema = getTheme();
     const [firstLaunch, setFirstLaunch] = useState(null);
-    const Stack = createNativeStackNavigator();
-
-    // const SPaperFonts = {
-    //     "Belanosima-Bold": require("../assets/fonts/Belanosima-Bold.ttf"),
-    //     "Belanosima-Regular": require("../assets/fonts/Belanosima-Regular.ttf"),
-    //     "Belanosima-SemiBold": require("../assets/fonts/Belanosima-SemiBold.ttf"),
-    // };
-    const SGugelFonts = {
-        SNL: SignikaNegative_300Light,
-        SNR: SignikaNegative_400Regular,
-        SNM: SignikaNegative_500Medium,
-        SNSB: SignikaNegative_600SemiBold,
-        SNB: SignikaNegative_700Bold,
-    };
-    const [fontsLoaded] = useFonts(SGugelFonts);
-    // Kontrol FirstLaunching
     useEffect(() => {
         // Uncomment di produksi Environment
         // async function setData() {
@@ -60,37 +62,60 @@ export function Main() {
         // setData();
         // Comment di produksi Environment
         setFirstLaunch(true);
+        dispatch(saveWPS_slides("s_slides"));
+        dispatch(saveWPPosts("allPost"));
+        dispatch(saveWPArtikelLatest("artikelLatest"));
+        dispatch(saveWPGuru("guru"));
+        dispatch(saveWPYoutube("youtube"));
+        dispatch(saveWPEksul("eksul"));
+        dispatch(saveWPOrganisasi("organisasi"));
+        dispatch(saveWPPostPenting("post_penting"));
     }, []);
-    useEffect(() => {
-        async function Check() {
-            console.log(fontsLoaded);
-            if (fontsLoaded) {
-                await SplashScreen.hideAsync();
-                setAppReady(true);
-            }
+    const Stack = createNativeStackNavigator<RootStackScreenList>();
+    // const SPaperFonts = {
+    //     "Belanosima-Bold": require("../assets/fonts/Belanosima-Bold.ttf"),
+    //     "Belanosima-Regular": require("../assets/fonts/Belanosima-Regular.ttf"),
+    //     "Belanosima-SemiBold": require("../assets/fonts/Belanosima-SemiBold.ttf"),
+    // };
+    const SGugelFonts = {
+        SNL: SignikaNegative_300Light,
+        SNR: SignikaNegative_400Regular,
+        SNM: SignikaNegative_500Medium,
+        SNSB: SignikaNegative_600SemiBold,
+        SNB: SignikaNegative_700Bold,
+    };
+    const [fontsLoaded] = useFonts(SGugelFonts);
+    // Kontrol FirstLaunching
+    const checkFontLoaded = async () => {
+        console.log(fontsLoaded);
+        if (fontsLoaded) {
+            await SplashScreen.hideAsync();
+            setAppReady(true);
         }
-        Check();
+    };
+
+    useEffect(() => {
+        checkFontLoaded();
     }, [fontsLoaded]);
 
-    // Kontrol IntisialisasiTheme
+    // Control Initialization Theme
     useEffect(() => {
-        const restorePrefs = async () => {
+        const restorePreferences = async () => {
             try {
                 const prefString = await AsyncStorage.getItem("APP_PREFERENCES");
                 const preferences = JSON.parse(prefString || "");
-                if (preferences) {
-                    if (preferences.theme === "dark") {
-                        dispatch({ type: "GoDark" });
-                    }
+                if (preferences && preferences.theme === "dark") {
+                    dispatch(toggleTheme());
                 }
             } catch (e) {
-                // ignore error-nyah
+                // Ignore the error
             }
         };
-        restorePrefs();
+
+        restorePreferences();
     }, []);
 
-    const themeMode = state.isDarkMode ? "dark" : "light";
+    const themeMode = isDarkMode ? "dark" : "light";
 
     // Kontrol Save Theme CONFIG ke Device Storage-nya
     useEffect(() => {
@@ -99,7 +124,7 @@ export function Main() {
                 await AsyncStorage.setItem(
                     "APP_PREFERENCES",
                     JSON.stringify({
-                        theme: state.theme,
+                        theme: getTema,
                     })
                 );
             } catch (e) {
@@ -108,25 +133,6 @@ export function Main() {
         };
         savePrefs();
     }, [themeMode]);
-    const themePaper = {
-        light: PaperLightThemeCombined,
-        dark: PaperDarkThemeCombined,
-    }[themeMode];
-
-    useEffect(() => {
-        const fetchPost = async () => {
-            try {
-                const data = await FetchResourceWP("artikel");
-                // console.log(data);
-                if (data) {
-                    dispatch({ type: "populatePostArtikel", payload: data });
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchPost();
-    }, []);
 
     const fontConfig = {
         bodyLarge: {
@@ -192,11 +198,14 @@ export function Main() {
         },
     };
 
-    const combinedTheme = state.isDarkMode ? CombinedDarkTheme : CombinedDefaultTheme;
+    const combinedTheme = isDarkMode ? CombinedDarkTheme : CombinedDefaultTheme;
 
-    const PaperTheme = { ...combinedTheme, fonts: configureFonts({ config: fontConfig as object }) };
+    const PaperTheme = {
+        ...combinedTheme,
+        fonts: configureFonts({ config: fontConfig as object }),
+    };
     const navigationRef = useNavigationContainerRef();
-    const [isInPost, setInPost] = useState(false);
+    const [isInCustomHeader, setInCustomHeader] = useState(false);
     return (
         AppReady &&
         firstLaunch != null && (
@@ -205,23 +214,52 @@ export function Main() {
                     theme={combinedTheme}
                     ref={navigationRef}
                     onStateChange={async () => {
-                        if (navigationRef.getCurrentRoute().name.startsWith("Post")) {
-                            setInPost(true);
-                        } else isInPost == true && setInPost(false);
+                        console.log(navigationRef.getCurrentRoute().name);
+                        if (
+                            navigationRef.getCurrentRoute().name.startsWith("Post") ||
+                            navigationRef.getCurrentRoute().name.startsWith("Guru")
+                        ) {
+                            setInCustomHeader(true);
+                            // } else if (navigationRef.getCurrentRoute().name.startsWith("Search")) {
+                            //     setInCustomHeader(true);
+                        } else isInCustomHeader == true && setInCustomHeader(false);
                     }}>
                     <Stack.Navigator>
                         {firstLaunch && (
                             <>
-                                <Stack.Screen name="GetStarted" component={GetStarted} options={{ headerShown: false }} />
-                                <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
+                                <Stack.Screen
+                                    name="GetStarted"
+                                    component={GetStarted}
+                                    options={{ headerShown: false }}
+                                />
+                                <Stack.Screen
+                                    name="Welcome"
+                                    component={WelcomeScreen}
+                                    options={{ headerShown: false }}
+                                />
                             </>
                         )}
 
-                        <Stack.Screen name="(tabs)" component={MyTabs} options={{ headerShown: false }} />
-                        <Stack.Screen name="(post)" component={PostStack} options={{ headerShown: false }} />
-                        <Stack.Screen name="(search)" component={SearchStack} options={{ headerShown: false }} />
+                        <Stack.Screen
+                            name="(tabs)"
+                            component={MyTabs}
+                            options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                            name="(wordpress)"
+                            component={WordPressStack}
+                            options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                            name="(search)"
+                            component={SearchStack}
+                            options={{ headerShown: false }}
+                        />
                     </Stack.Navigator>
-                    <StatusBar style={isInPost ? "light" : state.isDarkMode ? "light" : "dark"} animated />
+                    <StatusBar
+                        style={isInCustomHeader ? "light" : isDarkMode ? "light" : "dark"}
+                        animated
+                    />
                 </NavigationContainer>
             </PaperProvider>
         )

@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, View } from "react-native";
+import { KeyboardAvoidingView, Platform, StatusBar, View } from "react-native";
 import { useTheme } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function DefaultView({ children, background, keyboardAvoidView, styleView }) {
     const { colors } = useTheme();

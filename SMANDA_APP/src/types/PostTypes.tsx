@@ -60,17 +60,22 @@ export type PagedPosts = {
 };
 
 export interface MappedPostData {
-    ukid: number;
+    urutan: number;
     id: number;
+    categories: number[];
     title: string;
-    imageThumbnail: string;
+    imageThumbnail: string | null;
     author: { name: string; id: number };
     date: string;
     slug: string;
     content: { rendered: string; protected: boolean };
     version: { count: number; href: string }[];
     type: string;
+    from: "OSIS" | "SMANDA";
     status: string;
     redirect: string;
     local_date: string;
+    formatted_date: string;
+    slide?: string[];
+    audio: { exist: boolean; audioTags: string; sanitizeHtml: string };
 }

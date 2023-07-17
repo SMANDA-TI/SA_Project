@@ -1,20 +1,22 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SearchMapper from "./SearchMapper";
 import HeaderSearch from "../../components/HeaderSearch";
-import { RootScreenProps, RootStackScreen } from "../../types/RootType";
-import { useGlobals } from "../../context/RootContext";
+import { RootStackScreenProps } from "../../types/RootType";
 
 const Stack = createNativeStackNavigator();
-export default function SearchStack(props: RootScreenProps) {
-    const { state } = useGlobals();
+export default function SearchStack(props: RootStackScreenProps<"(search)">) {
     return (
         <Stack.Navigator>
             <Stack.Screen
                 name={"Search"}
                 component={SearchMapper}
                 options={{
-                    header: (props) => <HeaderSearch />,
-                    headerTransparent: true,
+                    header: (props) => (
+                        <HeaderSearch
+                            navigation={props.navigation as any}
+                            route={props.route as any}
+                        />
+                    ),
                 }}
             />
         </Stack.Navigator>

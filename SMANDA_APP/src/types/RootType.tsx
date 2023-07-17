@@ -1,66 +1,64 @@
-import { ParamListBase, NavigatorScreenParams, RouteProp, CompositeScreenProps } from "@react-navigation/native";
+import {
+    NavigatorScreenParams,
+    CompositeScreenProps,
+    NavigationProp,
+} from "@react-navigation/native";
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MappedPostData } from "./PostTypes";
+import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
-export type RootStackScreen = {
+export type BottomTabScreenAvailableParam = {
+    Home: undefined;
+    School: { scrollTo: "Filosofi" | "Denah" | "Lokasi" } | undefined;
+    Information: undefined;
+    Settings: undefined;
+    Article: undefined;
+};
+
+export type BottomTabScreenAvailable = "Home" | "School" | "Information" | "Settings" | "Article";
+
+export type RootStackScreenList = {
     Welcome: undefined;
     GetStarted: undefined;
-    "(tabs)": NavigatorScreenParams<RootTabScreen>;
-    "(post)": {
-        screen: PostScreenAvailable;
-        params: {
-            post_data: MappedPostData;
-        };
-    };
-    "(overlay)": NavigatorScreenParams<RootOverlayScreen>;
-    "(search)": { screen: SearchScreenAvailable };
-};
-export type RouteRootStackScreen = {
-    Welcome: undefined;
-    GetStarted: undefined;
-    "(tabs)": NavigatorScreenParams<RootTabScreen>;
-    "(post)": {
-        post_data: MappedPostData;
-    };
-    "(overlay)": NavigatorScreenParams<RootOverlayScreen>;
-    "(search)": { screen: SearchScreenAvailable };
+    "(tabs)": NavigatorScreenParams<BottomTabScreenAvailableParam>;
+    "(search)": NavigatorScreenParams<SearchAvailableScreenParam>;
+    "(wordpress)": NavigatorScreenParams<WPAvailableScreenParam>;
 };
 
-export type TabScreenAvailable = "Home" | "School" | "Information" | "Settings";
-export type OverlayScreenAvailable = "Account";
-export type PostScreenAvailable = "PostOverview";
-export type SearchScreenAvailable = "Search";
-export type PostParamAvailable = "post_data";
+export type SearchAvailableScreenParam = {
+    Search: undefined;
+};
+export type WPAvailableScreenParam = {
+    PostOverview: { post_data: MappedPostData } | undefined;
+    GuruOverview: { post_data: MappedPostData } | undefined;
+};
 
-export type RootTabScreen = {
-    [Key in TabScreenAvailable]: undefined;
-};
-export type RootOverlayScreen = {
-    [Key in OverlayScreenAvailable]: undefined;
-};
-export type RootPostScreen = {
-    params: { post_data: MappedPostData };
-};
-// export type RootPostScreen = {
-//     screen?: PostScreenAvailable;
-//     post_data?: MappedPostData;
-// };
+export type RootStackScreenProps<T extends keyof RootStackScreenList> = NativeStackScreenProps<
+    RootStackScreenList,
+    T
+>;
 
-// export type RootScreenProps<T extends keyof RootStackScreen> = NativeStackScreenProps<RootStackScreen, T>;
-// export type RootScreenProps<T extends keyof RootStackScreen = keyof RootStackScreen> = NativeStackScreenProps<RootStackScreen, T>;
-export type RoutePostProp = RouteProp<RouteRootStackScreen, "(post)">;
-export type RootScreenProps = NativeStackScreenProps<RootStackScreen>;
-export type DKRootScreenProps = NativeStackScreenProps<ParamListBase>;
-export type typeUseNavigation = NativeStackNavigationProp<ParamListBase>;
-export type NavigationProp = NativeStackNavigationProp<ParamListBase>;
+export type RootTabScreenProps<T extends keyof BottomTabScreenAvailableParam> =
+    CompositeScreenProps<
+        BottomTabScreenProps<BottomTabScreenAvailableParam, T>,
+        RootStackScreenProps<keyof RootStackScreenList>
+    >;
+export type WPNestStackScreenProps<T extends keyof WPAvailableScreenParam> = CompositeScreenProps<
+    NativeStackScreenProps<WPAvailableScreenParam, T>,
+    RootStackScreenProps<keyof RootStackScreenList>
+>;
 
-export type PropsPost = {
-    navigation?: NavigationProp;
-    route?: RoutePostProp;
-};
-export type PropsOptional = {
-    navigation?: NavigationProp;
-    route?: RouteProp<RouteRootStackScreen>;
-};
-// export type typeUseNavigation = NativeStackNavigationProp<ParamListBase<RootStackScreen>>;
-// export type RootStackScreenProps<T extends keyof RootStackScreen> = NativeStackScreenProps<RootStackScreen, T>;
+export type useNavigationType = NavigationProp<RootStackScreenList>;
+
+export type TabNavigationProps<T extends keyof BottomTabScreenAvailableParam> =
+    NativeStackNavigationProp<BottomTabScreenAvailableParam, T>;
+export type StackNavigationProps<T extends keyof RootStackScreenList> = NativeStackNavigationProp<
+    RootStackScreenList,
+    T
+>;
+
+declare global {
+    namespace ReactNavigation {
+        interface RootParamList extends RootStackScreenList {}
+    }
+}

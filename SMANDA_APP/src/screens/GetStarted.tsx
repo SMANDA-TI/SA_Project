@@ -1,14 +1,30 @@
-import { Image, StyleSheet, View } from "react-native";
-import { RootScreenProps } from "../types/RootType";
-import { Text, Button, Headline } from "react-native-paper";
+import { Image, StyleSheet, View, Platform } from "react-native";
+import { RootStackScreenProps } from "../types/RootType";
+import { Text, Button, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import DefaultView from "../components/DefaultContainerView";
-import { useGlobals } from "../context/RootContext";
 
-export function GetStarted(props: RootScreenProps) {
-    // const tema = useTheme();
+// import * as NavigationBar from "expo-navigation-bar";
+import { useEffect } from "react";
+import { getTransparent } from "../context/Slicer/GlobalEnvironment";
+
+export function GetStarted(props: RootStackScreenProps<"GetStarted">) {
+    const tema = useTheme();
     // const nav = useNavigation<typeUseNavigation>();
-    const { state } = useGlobals();
+    // useEffect(() => {
+    //     async () => {
+    //         if (Platform.OS == "android") {
+    //             try {
+    //                 await NavigationBar.setBackgroundColorAsync(tema.colors.elevation.level2);
+    //                 await NavigationBar.setBorderColorAsync("transparent");
+    //                 await NavigationBar.setButtonStyleAsync(tema.dark ? "light" : "dark");
+    //             } catch (e) {
+    //                 // ignore error
+    //             }
+    //         } else return;
+    //     };
+    // }, [tema]);
+    const isTransparent = getTransparent();
     return (
         <DefaultView keyboardAvoidView={false}>
             <View style={{ flex: 0.3 }} />
@@ -16,7 +32,10 @@ export function GetStarted(props: RootScreenProps) {
                 <Text variant="headlineLarge" style={[styles.textHeadline]}>
                     Selamat datang!
                 </Text>
-                <Text style={styles.textText}>Di SMANDA APP, ini adalah platform informasi dan edukasi tentang SMAN 2 Kuningan.😎</Text>
+                <Text style={styles.textText}>
+                    Di SMANDA APP, ini adalah platform informasi dan edukasi tentang SMAN 2
+                    Kuningan.😎
+                </Text>
             </View>
             <View style={{ flex: 2 }}>
                 <Image
@@ -26,7 +45,7 @@ export function GetStarted(props: RootScreenProps) {
                         width: 600,
                         alignSelf: "center",
                     }}
-                    source={require("../../assets/Profile_Logo_SMANDA_APP.png")}
+                    source={require("../../assets/images/Profile_Logo_SMANDA_APP.png")}
                 />
             </View>
             <View style={styles.buttonContainer}>
@@ -34,7 +53,7 @@ export function GetStarted(props: RootScreenProps) {
                     style={{ borderRadius: 15 }}
                     contentStyle={{ height: 50 }}
                     labelStyle={{ fontSize: 15 }}
-                    mode={state.isTransparent ? "contained-tonal" : "contained"}
+                    mode={isTransparent ? "contained-tonal" : "contained"}
                     // uppercase={true}
                     onPress={() => props.navigation.replace("Welcome")}>
                     Get Started
