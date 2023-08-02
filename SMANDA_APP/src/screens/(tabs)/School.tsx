@@ -1,19 +1,16 @@
-import { View, SafeAreaView, Image, useWindowDimensions, ImageBackground } from "react-native";
+import { View, TouchableOpacity, Image, useWindowDimensions, ImageBackground } from "react-native";
 import { RootTabScreenProps } from "../../types/RootType";
-import { CommonActions } from "@react-navigation/native";
-import { Text, Card, Button, List, useTheme, Surface, Divider } from "react-native-paper";
-import ScreenWrapper from "../../components/ScreenWrapper";
+import { Text, Button, List, useTheme, Surface, Divider } from "react-native-paper";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 import { useRef, useState } from "react";
 import * as Linking from "expo-linking";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { getGuru, getS_slides } from "../../context/Slicer/WordpressProvider";
 import { getTransparent } from "../../context/Slicer/GlobalEnvironment";
-import { CarouselRenderItemInfo } from "react-native-reanimated-carousel/lib/typescript/types";
 import { MappedPostData } from "../../types/PostTypes";
 import { LinearGradient } from "expo-linear-gradient";
 import { FlashList, ListRenderItemInfo } from "@shopify/flash-list";
-type CarouselProps = RootTabScreenProps<"School"> & CarouselRenderItemInfo<MappedPostData>;
+// type CarouselProps = RootTabScreenProps<"School"> & CarouselRenderItemInfo<MappedPostData>;
 
 type SlideSchool = string[];
 
@@ -176,12 +173,6 @@ export function SchoolScreen(props: RootTabScreenProps<"School">) {
                                     </View>
                                 </Surface>
                                 <View>
-                                    <Button
-                                        mode="contained"
-                                        onPress={() => scrollHandler("Filosofi")}>
-                                        {" "}
-                                        Click ME!
-                                    </Button>
                                     <List.Section
                                         titleStyle={{ paddingLeft: 0 }}
                                         title="Tentang Sekolah">
@@ -532,7 +523,8 @@ function GuruFlash({ navigation, route }: RootTabScreenProps<"School">) {
                     <FlashList
                         // numColumns={2}
                         horizontal={true}
-                        nestedScrollEnabled={true}
+                        // nestedScrollEnabled={true}
+                        showsHorizontalScrollIndicator={false}
                         estimatedItemSize={pendidik?.length}
                         keyExtractor={(item) => `${item.from}:${item.id}`}
                         data={pendidik}

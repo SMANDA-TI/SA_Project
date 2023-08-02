@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { View, StyleSheet, Image } from "react-native";
 import { Text, Divider, Chip, useTheme } from "react-native-paper";
 import ScreenWrapper from "../../components/ScreenWrapper";
 import { useWindowDimensions } from "react-native";
-import RenderHtml, { HTMLElementModel, HTMLContentModel } from "react-native-render-html";
+import RenderHtml from "react-native-render-html";
 import { WPNestStackScreenProps } from "../../types/RootType";
 import { WebView } from "react-native-webview";
+import IframeRenderer, { iframeModel } from "@native-html/iframe-plugin";
 
 const PostScreen = (props: WPNestStackScreenProps<"PostOverview">) => {
     const { post_data } = props.route.params;
@@ -20,6 +21,7 @@ const PostScreen = (props: WPNestStackScreenProps<"PostOverview">) => {
         return (
             <View style={{ flex: 1 }}>
                 <WebView
+                    androidHardwareAccelerationDisabled={true}
                     key={WebViewKey}
                     source={{
                         html: audioTag,
@@ -60,6 +62,14 @@ const PostScreen = (props: WPNestStackScreenProps<"PostOverview">) => {
 
     //     fetchCss();
     // }, []);
+    const renderers = {
+        iframe: IframeRenderer,
+    };
+
+    const customHTMLElementModels = {
+        iframe: iframeModel,
+    };
+
     return (
         <View style={styles.screen}>
             <Image
@@ -73,16 +83,21 @@ const PostScreen = (props: WPNestStackScreenProps<"PostOverview">) => {
                     width: "100%",
                     alignSelf: "center",
                 }}
-                source={{
-                    uri: post_data.imageThumbnail,
-                }}
+                source={
+                    post_data.imageThumbnail
+                        ? {
+                              uri: post_data.imageThumbnail,
+                          }
+                        : require("../../../assets/images/No-picture-600x600.jpg")
+                }
             />
             <View style={{ flex: 1 }}>
                 <ScreenWrapper
                     // directionalLockEnabled={true}
                     indicatorStyle={tema.dark ? "white" : "black"}
                     // bounces={false}
-                    style={{ backgroundColor: "transparent" }}>
+                    style={{ backgroundColor: "transparent" }}
+                >
                     {/* CHATGPT!, I want this view below me to set the maximum hight able to be scroll is 200 */}
                     <View
                         style={{
@@ -90,7 +105,8 @@ const PostScreen = (props: WPNestStackScreenProps<"PostOverview">) => {
                             borderTopRightRadius: 30,
                             borderTopLeftRadius: 30,
                             marginTop: 250,
-                        }}>
+                        }}
+                    >
                         <View style={{ height: 24 }} />
                         {/* // ? Main Post Component ! */}
                         <View style={{ marginHorizontal: 20 }}>
@@ -122,6 +138,17 @@ const PostScreen = (props: WPNestStackScreenProps<"PostOverview">) => {
                                     <WebviewAudio audioTag={post_data.audio.audioTags} />
                                 )}
                                 <RenderHtml
+                                    renderers={renderers}
+                                    WebView={WebView}
+                                    customHTMLElementModels={customHTMLElementModels}
+                                    renderersProps={{
+                                        iframe: {
+                                            scalesPageToFit: true,
+                                        },
+                                        webViewProps: {
+                                            androidHardwareAccelerationDisabled: false,
+                                        },
+                                    }}
                                     systemFonts={["SNL", "SNR", "SNM", "SNSB", "SNB"]}
                                     baseStyle={{
                                         fontFamily: "SNM",

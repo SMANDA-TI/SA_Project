@@ -3,7 +3,6 @@ import { Main } from "./src/index";
 import smandaStore from "./src/context/ReduxData";
 // import * as ScreenOrientation from "expo-screen-orientation";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { DataProvider, itemReducer, InitialState } from "./src/context/DataSMANDA";
 import { Provider } from "react-redux";
 
 // import * as SplashScreen from "expo-splash-screen";

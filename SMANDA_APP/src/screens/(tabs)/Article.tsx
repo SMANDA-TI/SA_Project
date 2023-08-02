@@ -58,7 +58,8 @@ export function ArticleScreen(props: RootTabScreenProps<"Article">) {
 
 function Mars({ navigation }: JustNavigation) {
     const { width } = useWindowDimensions();
-    const PostPenting = getPostPenting();
+    const PostPenting = getPostPenting().filter((item) => item.categories.includes(22));
+
     return (
         <List.Section titleStyle={{ paddingLeft: 0 }} title={`Lagu Sekolah`}>
             <FlatList

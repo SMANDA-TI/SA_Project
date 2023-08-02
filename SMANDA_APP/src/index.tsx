@@ -7,12 +7,7 @@ import { WelcomeScreen } from "./screens/WelcomeScreen";
 import { GetStarted } from "./screens/GetStarted";
 import { MyTabs } from "./screens/(tabs)/Handler";
 import { PaperProvider, configureFonts } from "react-native-paper";
-import {
-    CombinedDarkTheme,
-    CombinedDefaultTheme,
-    PaperDarkThemeCombined,
-    PaperLightThemeCombined,
-} from "./Colors&Themes";
+import { CombinedDarkTheme, CombinedDefaultTheme } from "./Colors&Themes";
 import { StatusBar } from "expo-status-bar";
 import { useAppDispatch } from "./context/hooks";
 // import { useFonts } from "expo-font";
@@ -33,7 +28,6 @@ import {
     saveWPArtikelLatest,
     saveWPGuru,
     saveWPS_slides,
-    saveWPArtikel,
     saveWPEksul,
     saveWPYoutube,
     saveWPOrganisasi,
@@ -50,18 +44,18 @@ export function Main() {
     const [firstLaunch, setFirstLaunch] = useState(null);
     useEffect(() => {
         // Uncomment di produksi Environment
-        // async function setData() {
-        //     const appData = await AsyncStorage.getItem("appLaunched");
-        //     if (appData == null) {
-        //         setFirstLaunch(true);
-        //         AsyncStorage.setItem("appLaunched", "false");
-        //     } else {
-        //         setFirstLaunch(false);
-        //     }
-        // }
-        // setData();
+        async function setData() {
+            const appData = await AsyncStorage.getItem("appLaunched");
+            if (appData == null) {
+                setFirstLaunch(true);
+                AsyncStorage.setItem("appLaunched", "false");
+            } else {
+                setFirstLaunch(false);
+            }
+        }
+        setData();
         // Comment di produksi Environment
-        setFirstLaunch(true);
+        // setFirstLaunch(true);
         dispatch(saveWPS_slides("s_slides"));
         dispatch(saveWPPosts("allPost"));
         dispatch(saveWPArtikelLatest("artikelLatest"));

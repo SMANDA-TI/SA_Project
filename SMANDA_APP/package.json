@@ -11,6 +11,7 @@
   "dependencies": {
     "@expo-google-fonts/dev": "^0.2.3",
     "@expo-google-fonts/signika-negative": "^0.2.3",
+    "@native-html/iframe-plugin": "^2.6.1",
     "@react-native-async-storage/async-storage": "1.17.11",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/material-bottom-tabs": "^6.2.15",
